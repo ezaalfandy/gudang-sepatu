@@ -14,12 +14,12 @@
           ';
         }elseif ($this->session->flashdata('status') === 'failed') {
           echo '
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
               <span>
-                <b> Success - </b> '.$this->session->userdata('message').'</span>
+                <b> Failed- </b> '.$this->session->userdata('message').'</span>
             </div>
           ';
         }
@@ -37,29 +37,29 @@
             accept-charset="utf-8">
 
             <div class="card-body">
-              <label for="insert_supplier_kode_supplier"> Kode Supplier</label>
               <div class="form-group">
+                <label for="insert_supplier_kode_supplier"> Kode Supplier</label>
                 <input type="text" name="insert_kode_supplier" value="<?php echo set_value('insert_kode_supplier'); ?>"
-                  id="insert_supplier_kode_supplier" class="form-control" required="true" />
+                  id="insert_supplier_kode_supplier" class="form-control" required="true"  maxLength="3"/>
                 <small class="text-danger"><?php echo form_error('insert_kode_supplier'); ?></small>
               </div>
 
-              <label for="insert_supplier_nama"> Nama</label>
               <div class="form-group">
+                <label for="insert_supplier_nama"> Nama</label>
                 <input type="text" name="insert_nama" value="<?php echo set_value('insert_nama'); ?>"
                   id="insert_supplier_nama" class="form-control" required="true" />
                 <small class="text-danger"><?php echo form_error('insert_nama'); ?></small>
               </div>
 
-              <label for="insert_supplier_alamat"> Alamat</label>
               <div class="form-group">
+                <label for="insert_supplier_alamat"> Alamat</label>
                 <input type="text" name="insert_alamat" value="<?php echo set_value('insert_alamat'); ?>"
                   id="insert_supplier_alamat" class="form-control" required="true" />
                 <small class="text-danger"><?php echo form_error('insert_alamat'); ?></small>
               </div>
 
-              <label for="insert_supplier_telepon"> Telepon</label>
               <div class="form-group">
+                <label for="insert_supplier_telepon"> Telepon</label>
                 <input type="text" name="insert_telepon" value="<?php echo set_value('insert_telepon'); ?>"
                   id="insert_supplier_telepon" class="form-control" required="true" />
                 <small class="text-danger"><?php echo form_error('insert_telepon'); ?></small>
@@ -100,16 +100,16 @@
                   <td></td>
                   <td><?= $v_supplier->id_supplier?></td>
                   <td><?= $v_supplier->kode_supplier?></td>
-                  <td><?= $v_supplier->nama?></td>
-                  <td><?= $v_supplier->alamat?></td>
-                  <td><?= $v_supplier->telepon?></td>
+                  <td><?= $v_supplier->nama_supplier?></td>
+                  <td><?= $v_supplier->alamat_supplier?></td>
+                  <td><?= $v_supplier->telepon_supplier?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteSupplier()">
+                    <button class="btn btn-danger btn-sm" onclick="deleteSupplier(<?= $v_supplier->id_supplier?>)">
                       <i class="material-icons">
                         delete
                       </i>
                     </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalSupplier()">
+                    <button class="btn btn-info btn-sm" onclick="openModalSupplier(<?= $v_supplier->id_supplier?>)">
                       <i class="material-icons">
                         create
                       </i>
@@ -141,36 +141,31 @@
           </button>
         </div>
         <div class="modal-body">
-          <label for="edit_supplier_id_supplier"> Id Supplier</label>
+        
+          <input type="hidden" name="edit_id_supplier" value="<?php echo set_value('edit_id_supplier'); ?>"/>
           <div class="form-group">
-            <input type="number" name="edit_id_supplier" value="<?php echo set_value('edit_id_supplier'); ?>"
-              id="edit_supplier_id_supplier" class="form-control" required="true" />
-            <small class="text-danger"><?php echo form_error('edit_id_supplier'); ?></small>
-          </div>
-
-          <label for="edit_supplier_kode_supplier"> Kode Supplier</label>
-          <div class="form-group">
+            <label for="edit_supplier_kode_supplier"> Kode Supplier</label>
             <input type="text" name="edit_kode_supplier" value="<?php echo set_value('edit_kode_supplier'); ?>"
-              id="edit_supplier_kode_supplier" class="form-control" required="true" />
+              id="edit_supplier_kode_supplier" class="form-control" required="true" maxLength="3"/>
             <small class="text-danger"><?php echo form_error('edit_kode_supplier'); ?></small>
           </div>
 
-          <label for="edit_supplier_nama"> Nama</label>
           <div class="form-group">
+            <label for="edit_supplier_nama"> Nama</label>
             <input type="text" name="edit_nama" value="<?php echo set_value('edit_nama'); ?>" id="edit_supplier_nama"
               class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_nama'); ?></small>
           </div>
 
-          <label for="edit_supplier_alamat"> Alamat</label>
           <div class="form-group">
+            <label for="edit_supplier_alamat"> Alamat</label>
             <input type="text" name="edit_alamat" value="<?php echo set_value('edit_alamat'); ?>"
               id="edit_supplier_alamat" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_alamat'); ?></small>
           </div>
 
-          <label for="edit_supplier_telepon"> Telepon</label>
           <div class="form-group">
+            <label for="edit_supplier_telepon"> Telepon</label>
             <input type="text" name="edit_telepon" value="<?php echo set_value('edit_telepon'); ?>"
               id="edit_supplier_telepon" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_telepon'); ?></small>
@@ -223,19 +218,19 @@
       buttonsStyling: false
     }).then(function (result) {
       if (result.value === true) {
-        window.location.href = "<?= base_url(' /delete-supplier/')?>" + $id_supplier;
+        window.location.href = "<?= base_url('asisten-manager-gudang/delete-supplier/')?>" + $id_supplier;
       }
     })
   }
 
   function openModalSupplier($id_supplier) {
-    $.getJSON("<?= base_url(' /get-specificsupplier/')?>" + $id_supplier,
+    $.getJSON("<?= base_url('asisten-manager-gudang/get-specific-supplier/')?>" + $id_supplier,
       function (data, textStatus, jqXHR) {
         $('#formEditSupplier [name="edit_id_supplier"]').val(data.id_supplier);
         $('#formEditSupplier [name="edit_kode_supplier"]').val(data.kode_supplier);
-        $('#formEditSupplier [name="edit_nama"]').val(data.nama);
-        $('#formEditSupplier [name="edit_alamat"]').val(data.alamat);
-        $('#formEditSupplier [name="edit_telepon"]').val(data.telepon);
+        $('#formEditSupplier [name="edit_nama"]').val(data.nama_supplier);
+        $('#formEditSupplier [name="edit_alamat"]').val(data.alamat_supplier);
+        $('#formEditSupplier [name="edit_telepon"]').val(data.telepon_supplier);
         $('#modalEditSupplier').modal('show');
       }
     );

@@ -1,0 +1,36 @@
+*{
+    box-sizing: border-box;
+}
+@page{
+    width: 96mm;
+    height: 18mm;
+    margin: 0mm 1mm !important;
+}
+body{
+    width: 96mm; 
+}
+html{
+    padding: 0mm;
+    width: 96mm; 
+}
+.barcode{
+    width: 33.333% !important;
+    height: 18mm !important;
+    float: left;
+}
+
+.barcode img{
+    margin-top: 6mm;
+    max-width: 100% !important;
+}
+@media print {
+    html{
+        padding: 0mm;
+        width: 96mm; 
+        margin: 0mm;
+    } 
+    body{
+        width: 96mm; 
+        margin: 0mm; 
+    } 
+}

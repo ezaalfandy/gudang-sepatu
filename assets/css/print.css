@@ -1,0 +1,54 @@
+
+@page{
+    size: A4;
+    margin:0mm 5mm;
+}
+body{
+    width: 210mm;
+    height: 297mm;
+    padding: 5mm; 
+}
+html{
+    padding: 0mm;
+}
+
+.custom-table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-collapse: collapse !important;
+}
+
+.custom-table thead{
+    background-color: #222222;
+    color: #ddd;
+}
+
+.custom-table td, .custom-table th {
+	padding: .75rem;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+}
+
+.custom-table tbody tr:nth-of-type(2n+1) {
+    background-color: rgba(34,34,34,.03);
+}
+
+.ttd{
+    height:2cm;
+    width: 100%;
+}
+@media print {
+    html{
+        padding: 0mm;
+    } 
+    body{
+        width: 210mm;
+        height: 297mm;
+        margin: 0mm; 
+        padding:10mm;
+    } 
+    table td, table th{
+        border: 1px solid #ddd;
+    }
+}

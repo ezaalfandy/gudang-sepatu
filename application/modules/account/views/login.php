@@ -39,7 +39,8 @@
                 </div>
                 <div class="card-body">
                   <?php
-                    if($this->session->flashdata('message') !== null){
+                    if($this->session->flashdata('message') !== null)
+        {
                       echo '
                       <div class="alert alert-danger">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

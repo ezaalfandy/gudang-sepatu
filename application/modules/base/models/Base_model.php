@@ -8,8 +8,14 @@
         {
             return $this->db->get($table, $limit, $offset)->result();
         }
+
+        public function get_all_specific($table, $where, $limit = 0, $offset = 0)
+        {
+            return $this->db->where($where)->get($table, $limit, $offset)->result();
+        }
         
-        public function insert($table, $array){
+        public function insert($table, $array)
+        {
             $this->db->insert($table, $array);
             
             if($this->db->affected_rows() > 0)
@@ -21,11 +27,13 @@
             }
         }
 
-        public function get_specific($table, $where){
+        public function get_specific($table, $where)
+        {
             return $this->db->where($where)->get($table)->row();
         }
 
-        public function edit($table, $where, $data){
+        public function edit($table, $where, $data)
+        {
             $this->db->where($where)->update($table, $data);
             if($this->db->affected_rows() > 0)
             { 
@@ -36,7 +44,8 @@
             }
         }
 
-        public function delete($table, $where){
+        public function delete($table, $where)
+        {
             $this->db->where($where)->delete($table);
             
             if($this->db->affected_rows() > 0)
@@ -46,6 +55,22 @@
             {
                 return false;
             }
+        }
+
+        public function get_last_primary_key($table, $primary_key)
+        {
+            $last_row = $this->db->order_by($primary_key, 'DESC')
+                                        ->get($table)
+                                        ->row();
+            if($last_row == null)
+            {
+                return 0;
+            }else
+            {
+                return $last_row->$primary_key;
+            }
+                                    
+                            
         }
     }
     

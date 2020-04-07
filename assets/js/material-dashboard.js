@@ -225,7 +225,15 @@ $(window).resize(function() {
 
 md = {
   setFormValidation : function($form){
-    $($form).validate();
+    $($form).validate({
+      errorPlacement : function(error, element){
+        if(element[0].type == 'file'){
+          error.insertAfter($(element[0]).parents('.fileinput'))
+        }else{
+          error.insertAfter(element)
+        }
+      }
+    });
   },
   misc: {
     navbar_menu_visible: 0,

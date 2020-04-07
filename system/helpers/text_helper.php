@@ -68,7 +68,8 @@ if ( ! function_exists('word_limiter'))
 			return $str;
 		}
 
-		preg_match('/^\s*+(?:\S++\s*+){1,'.(int) $limit.'}/', $str, $matches);
+		preg_match('/^\s*+(?:\S++\s*+)
+        {1,'.(int) $limit.'}/', $str, $matches);
 
 		if (strlen($str) === strlen($matches[0]))
 		{
@@ -271,7 +272,8 @@ if ( ! function_exists('word_censor'))
 		// set for performance reasons. As a result words like über
 		// will not match on a word boundary. Instead, we'll assume that
 		// a bad word will be bookeneded by any of these characters.
-		$delim = '[-_\'\"`(){}<>\[\]|!?@#%&,.:;^~*+=\/ 0-9\n\r\t]';
+		$delim = '[-_\'\"`()
+        {}<>\[\]|!?@#%&,.:;^~*+=\/ 0-9\n\r\t]';
 
 		foreach ($censored as $badword)
 		{
@@ -284,7 +286,8 @@ if ( ! function_exists('word_censor'))
 					$str
 				);
 			}
-			elseif (preg_match_all("/{$delim}(".$badword."){$delim}/i", $str, $matches, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE))
+			elseif (preg_match_all("/{$delim}(".$badword.")
+        {$delim}/i", $str, $matches, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE))
 			{
 				$matches = $matches[1];
 				for ($i = count($matches) - 1; $i >= 0; $i--)

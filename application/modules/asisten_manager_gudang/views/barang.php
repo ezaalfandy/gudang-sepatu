@@ -2,7 +2,8 @@
   <div class="row">
     <div class="col-md-12">
       <?php
-        if($this->session->flashdata('status') === 'success'){
+        if($this->session->flashdata('status') === 'success')
+        {
           echo '
             <div class="alert alert-success">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -14,17 +15,18 @@
           ';
         }elseif ($this->session->flashdata('status') === 'failed') {
           echo '
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
               <span>
-                <b> Success - </b> '.$this->session->userdata('message').'</span>
+                <b> Failed- </b> '.$this->session->userdata('message').'</span>
             </div>
           ';
         }
       ?>
     </div>
+
     <div class="col-md-12 col-lg-4">
       <div class="card">
         <div class="card-header card-header-primary card-header-icon">
@@ -34,7 +36,7 @@
           <h4 class="card-title">Tambah Barang</h4>
         </div>
         <form action="<?= base_url('Asisten-manager-gudang/insert-barang')?>" method="post" accept-charset="utf-8"
-          novalidate="novalidate" id="formTambahBarang">
+          novalidate="novalidate" id="formTambahBarang" enctype="multipart/form-data">
           <div class="card-body ">
 
             <div class="form-group">
@@ -65,10 +67,28 @@
             </div>
 
             <div class="form-group">
-              <label for="insert_barang_stok_awal">Stok Awal</label>
-              <input type="number" name="insert_stok_awal" value="<?php echo set_value('stok_awal'); ?>" id="insert_barang_stok_awal"
+              <label for="insert_barang_alarm_stok_minimal">Alarm Stok Minimal</label>
+              <input type="number" name="insert_alarm_stok_minimal" value="<?php echo set_value('alarm_stok_minimal'); ?>" id="insert_barang_alarm_stok_minimal"
                 class="form-control" required="true" min="0" />
             </div>
+
+            <div class="form-group">
+              <div class="fileinput fileinput-new text-center mt-3" data-provides="fileinput">
+                <div class="fileinput-new thumbnail">
+                  <img src="<?= base_url('assets/img/image_placeholder.jpg')?>" alt="..." class="drop-shadow-sm">
+                </div>
+                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                <div>
+                  <span class="btn btn-default btn-file">
+                    <span class="fileinput-new">Upload Gambar</span>
+                    <span class="fileinput-exists">Ganti</span>
+                    <input type="file" name="insert_barang_gambar[]" multiple extension="jpg|gif|png|jpeg">
+                  </span>
+                  <a href="#pablo" class="btn btn-danger fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Hapus</a>
+                </div>
+              </div>
+            </div>
+          
           </div>
           <div class="card-footer">
             <button type="submit" class="btn btn-fill btn-primary">Submit</button>
@@ -96,7 +116,7 @@
                   <td>Tipe</td>
                   <td>Warna</td>
                   <td>Ukuran</td>
-                  <td>Stok Tersedia</td>
+                  <td>Stok Total</td>
                   <td data-priority="1">Aksi</td>
                 </tr>
               </thead>
@@ -111,16 +131,29 @@
                   <td><?= $v_barang->ukuran?></td>
                   <td><?= $v_barang->stok_tersedia?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteBarang(<?= $v_barang->id_barang?>)">
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalBarang(<?= $v_barang->id_barang?>)">
-                      <i class="material-icons">
-                        create
-                      </i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-danger btn-sm" onclick="deleteBarang(<?= $v_barang->id_barang?>)">
+                          <i class="material-icons">
+                            delete
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-info btn-sm" onclick="openModalEditBarang(<?= $v_barang->id_barang?>)">
+                          <i class="material-icons">
+                            create
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-12 px-1">
+                        <a class="btn btn-primary btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-barang/').$v_barang->kode_barang?>">
+                          <i class="material-icons">
+                            search
+                          </i> Lihat Stok
+                        </a>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -177,7 +210,7 @@
               id="edit_barang_ukuran" class="form-control" required="true" min="0" />
             <small class="text-danger"><?php echo form_error('edit_ukuran'); ?></small>
           </div>
-
+          
         </div>
         <div class="modal-footer">
           <input type="reset" value="Reset" class="btn btn-outline-primary" />
@@ -189,7 +222,6 @@
 </div>
 
 <script>
-  
   <?php
     $merek_lookup = [];
     foreach ($data_merek as $k => $v) {
@@ -218,7 +250,8 @@
   md.setInputAutoComplete('#autocomplete_edit_barang_merek', $merek);
   md.setInputAutoComplete('#autocomplete_edit_barang_warna', $warna);
 
-   function deleteBarang($id_barang){
+  function deleteBarang($id_barang)
+  {
     swal({
         title: 'Apakah Anda Yakin ?',
         text: "Data Barang akan dihapus dan tidak dapat dikembalikan !",
@@ -229,7 +262,8 @@
         confirmButtonText: 'Ya, Hapus',
         buttonsStyling: false
     }).then(function(result) {
-        if(result.value === true){
+        if(result.value === true)
+        {
           window.location.href = "<?= base_url('Asisten-manager-gudang/delete-barang/')?>"+ $id_barang;
         }
     })
@@ -255,18 +289,17 @@
     }).draw();
 
     t_barang.on( 'responsive-resize', function ( e, datatable, columns ) {
-    var count = columns.reduce( function (a,b) {
-        return b === false ? a+1 : a;
-    }, 0 );
- 
-        console.log( count +' column(s) are hidden' );
+      var count = columns.reduce( function (a,b) {
+          return b === false ? a+1 : a;
+      }, 0 );
     });
+
     md.setFormValidation($('#formTambahBarang'));
     md.setFormValidation($('#formEditBarang'));
-
   });
 
-  function openModalBarang($id_barang){
+  function openModalEditBarang($id_barang)
+        {
       $.getJSON("<?= base_url('Asisten-manager-gudang/get-specific-barang/')?>"+$id_barang,
         function (data, textStatus, jqXHR) {
           $('#formEditBarang .form-group').addClass('is-filled');

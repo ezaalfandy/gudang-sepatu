@@ -14,12 +14,12 @@
           ';
         }elseif ($this->session->flashdata('status') === 'failed') {
           echo '
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
               <span>
-                <b> Success - </b> '.$this->session->userdata('message').'</span>
+                <b> Failed- </b> '.$this->session->userdata('message').'</span>
             </div>
           ';
         }
@@ -37,36 +37,43 @@
           action="<?= base_url('asisten-manager-gudang/insert-gudang')?>" method="post" accept-charset="utf-8">
           <div class="card-body">
 
-            <label for="insert_gudang_alamat"> Alamat</label>
             <div class="form-group">
+              <label for="insert_gudang_kode_gudang"> Kode Gudang</label>
+              <input type="text" name="insert_kode_gudang" value="<?php echo set_value('insert_kode_gudang'); ?>"
+                id="insert_gudang_kode_gudang" class="form-control" required="true"  maxLength="3"/>
+              <small class="text-danger"><?php echo form_error('insert_kode_gudang'); ?></small>
+            </div>
+
+            <div class="form-group">
+              <label for="insert_gudang_alamat"> Alamat</label>
               <input type="text" name="insert_alamat" value="<?php echo set_value('insert_alamat'); ?>"
                 id="insert_gudang_alamat" class="form-control" required="true" />
               <small class="text-danger"><?php echo form_error('insert_alamat'); ?></small>
             </div>
 
-            <label for="insert_gudang_kabupaten_kota"> Kabupaten Kota</label>
             <div class="form-group">
+              <label for="insert_gudang_kabupaten_kota"> Kabupaten Kota</label>
               <input type="text" name="insert_kabupaten_kota" value="<?php echo set_value('insert_kabupaten_kota'); ?>"
                 id="insert_gudang_kabupaten_kota" class="form-control" required="true" />
               <small class="text-danger"><?php echo form_error('insert_kabupaten_kota'); ?></small>
             </div>
 
-            <label for="insert_gudang_provinsi"> Provinsi</label>
             <div class="form-group">
+              <label for="insert_gudang_provinsi"> Provinsi</label>
               <input type="text" name="insert_provinsi" value="<?php echo set_value('insert_provinsi'); ?>"
                 id="insert_gudang_provinsi" class="form-control" required="true" />
               <small class="text-danger"><?php echo form_error('insert_provinsi'); ?></small>
             </div>
 
-            <label for="insert_gudang_kode_pos"> Kode Pos</label>
             <div class="form-group">
+              <label for="insert_gudang_kode_pos"> Kode Pos</label>
               <input type="number" name="insert_kode_pos" value="<?php echo set_value('insert_kode_pos'); ?>"
                 id="insert_gudang_kode_pos" class="form-control" required="true" min="0" />
               <small class="text-danger"><?php echo form_error('insert_kode_pos'); ?></small>
             </div>
 
-            <label for="insert_gudang_nomor_telepon"> Nomor Telepon</label>
             <div class="form-group">
+              <label for="insert_gudang_nomor_telepon"> Nomor Telepon</label>
               <input type="text" name="insert_nomor_telepon" value="<?php echo set_value('insert_nomor_telepon'); ?>"
                 id="insert_gudang_nomor_telepon" class="form-control" required="true" />
               <small class="text-danger"><?php echo form_error('insert_nomor_telepon'); ?></small>
@@ -94,10 +101,8 @@
               <thead>
                 <tr>
                   <td>No</td>
+                  <td> Kode Gudang</td>
                   <td> Alamat</td>
-                  <td> Kabupaten Kota</td>
-                  <td> Provinsi</td>
-                  <td> Kode Pos</td>
                   <td> Nomor Telepon</td>
                   <td>Aksi</td>
                 </tr>
@@ -106,10 +111,8 @@
                 <?php foreach($data_gudang as $k_gudang => $v_gudang):?>
                 <tr>
                   <td></td>
-                  <td><?= $v_gudang->alamat?></td>
-                  <td><?= $v_gudang->kabupaten_kota?></td>
-                  <td><?= $v_gudang->provinsi?></td>
-                  <td><?= $v_gudang->kode_pos?></td>
+                  <td><?= $v_gudang->kode_gudang?></td>
+                  <td><?= $v_gudang->alamat.'.<br>'.$v_gudang->kabupaten_kota.' - '.$v_gudang->provinsi.' ('.$v_gudang->kode_pos.')'?></td>
                   <td><?= $v_gudang->nomor_telepon?></td>
                   <td>
                     <button class="btn btn-danger btn-sm" onclick="deleteGudang(<?= $v_gudang->id_gudang?>)">
@@ -142,7 +145,7 @@
         action="<?= base_url('asisten-manager-gudang/edit-gudang')?>" method="post" accept-charset="utf-8">
 
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">Edit Gudang</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -150,37 +153,44 @@
         <div class="modal-body">
           <input type="hidden" name="edit_id_gudang" value="<?php echo set_value('edit_id_gudang'); ?>"
               id="edit_gudang_id_gudang" required="true" />
-
-          <label for="edit_gudang_alamat"> Alamat</label>
+          
           <div class="form-group">
+            <label for="edit_gudang_kode_gudang"> Kode Gudang</label>
+            <input type="text" name="edit_kode_gudang" value="<?php echo set_value('edit_kode_gudang'); ?>"
+              id="edit_gudang_kode_gudang" class="form-control" required="true"  maxLength="3"/>
+            <small class="text-danger"><?php echo form_error('edit_kode_gudang'); ?></small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_gudang_alamat"> Alamat</label>
             <input type="text" name="edit_alamat" value="<?php echo set_value('edit_alamat'); ?>"
               id="edit_gudang_alamat" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_alamat'); ?></small>
           </div>
 
-          <label for="edit_gudang_kabupaten_kota"> Kabupaten Kota</label>
           <div class="form-group">
+            <label for="edit_gudang_kabupaten_kota"> Kabupaten Kota</label>
             <input type="text" name="edit_kabupaten_kota" value="<?php echo set_value('edit_kabupaten_kota'); ?>"
               id="edit_gudang_kabupaten_kota" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_kabupaten_kota'); ?></small>
           </div>
 
-          <label for="edit_gudang_provinsi"> Provinsi</label>
           <div class="form-group">
+            <label for="edit_gudang_provinsi"> Provinsi</label>
             <input type="text" name="edit_provinsi" value="<?php echo set_value('edit_provinsi'); ?>"
               id="edit_gudang_provinsi" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_provinsi'); ?></small>
           </div>
 
-          <label for="edit_gudang_kode_pos"> Kode Pos</label>
           <div class="form-group">
+            <label for="edit_gudang_kode_pos"> Kode Pos</label>
             <input type="number" name="edit_kode_pos" value="<?php echo set_value('edit_kode_pos'); ?>"
               id="edit_gudang_kode_pos" class="form-control" required="true" min="0" />
             <small class="text-danger"><?php echo form_error('edit_kode_pos'); ?></small>
           </div>
 
-          <label for="edit_gudang_nomor_telepon"> Nomor Telepon</label>
           <div class="form-group">
+            <label for="edit_gudang_nomor_telepon"> Nomor Telepon</label>
             <input type="text" name="edit_nomor_telepon" value="<?php echo set_value('edit_nomor_telepon'); ?>"
               id="edit_gudang_nomor_telepon" class="form-control" required="true" />
             <small class="text-danger"><?php echo form_error('edit_nomor_telepon'); ?></small>
@@ -245,6 +255,7 @@
       function (data, textStatus, jqXHR) {
 
         $('#formEditGudang [name="edit_id_gudang"]').val(data.id_gudang);
+        $('#formEditGudang [name="edit_kode_gudang"]').val(data.kode_gudang);
         $('#formEditGudang [name="edit_alamat"]').val(data.alamat);
         $('#formEditGudang [name="edit_kabupaten_kota"]').val(data.kabupaten_kota);
         $('#formEditGudang [name="edit_provinsi"]').val(data.provinsi);

@@ -380,7 +380,8 @@ class CI_Security {
 			{
 				$oldstr = $str;
 				$str = rawurldecode($str);
-				$str = preg_replace_callback('#%(?:\s*[0-9a-f]){2,}#i', array($this, '_urldecodespaces'), $str);
+				$str = preg_replace_callback('#%(?:\s*[0-9a-f])
+        {2,}#i', array($this, '_urldecodespaces'), $str);
 			}
 			while ($oldstr !== $str);
 			unset($oldstr);

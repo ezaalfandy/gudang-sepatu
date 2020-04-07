@@ -14,12 +14,12 @@
           ';
         }elseif ($this->session->flashdata('status') === 'failed') {
           echo '
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
               <span>
-                <b> Success - </b> '.$this->session->userdata('message').'</span>
+                <b> Failed- </b> '.$this->session->userdata('message').'</span>
             </div>
           ';
         }

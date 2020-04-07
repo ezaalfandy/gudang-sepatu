@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="76x76" href="<?= base_url('assets/')?>img/apple-icon.png">
-  <link rel="icon" type="image/png" href="<?= base_url('assets/')?>img/favicon.png">
+  <link rel="icon" type="image/png" href="<?= base_url('assets/')?>img/joemen-icon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
     Joman - <?= $this->session->userdata('nama');?>
@@ -16,6 +16,7 @@
 
   <link href="<?= base_url('assets/')?>iconfont/material-icons.css" rel="stylesheet" />
   <link href="<?= base_url('assets/')?>css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
+  <link href="<?= base_url('assets/')?>css/custom.css" rel="stylesheet" />
   
   <script src="<?= base_url('assets/')?>js/core/jquery.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/core/popper.min.js" type="text/javascript"></script>
@@ -24,9 +25,11 @@
 
   <script src="<?= base_url('assets/')?>js/plugins/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/chartist.min.js" type="text/javascript"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/jasny-bootstrap.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/jquery.dataTables.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/sweetalert2.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/additional-methods.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/jquery.autocomplete.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
 </head>
@@ -128,6 +131,12 @@
               <p> Supplier</p>
             </a>
           </li>
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-hand-over'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-hand-over')?>">
+              <i class="material-icons">compare_arrows</i>
+              <p>Hand Over</p>
+            </a>
+          </li>
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
               <i class="material-icons">shopping_cart</i>
@@ -166,7 +175,7 @@
                 <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:void(0)"><?= ucwords($this->uri->segment(2));?></a>
+            <a class="navbar-brand" href="javascript:void(0)"><?= str_replace('view', '', $this->uri->segment(2));?></a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
             aria-expanded="false" aria-label="Toggle navigation">

@@ -14,12 +14,12 @@
           ';
         }elseif ($this->session->flashdata('status') === 'failed') {
           echo '
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
               <span>
-                <b> Success - </b> '.$this->session->userdata('message').'</span>
+                <b> Danger - </b> '.$this->session->userdata('message').'</span>
             </div>
           ';
         }
@@ -48,7 +48,7 @@
                   <td>kode_pre_order</td>
                   <td>Supplier</td>
                   <td>Gudang Tujuan</td>
-                  <td>Kode Pre Order</td>
+                  <td>Tanggal Terbit</td>
                   <td>Aksi</td>
                 </tr>
               </thead>
@@ -57,20 +57,40 @@
                 <tr>
                   <td></td>
                   <td><?= $v_pre_order->kode_pre_order?></td>
-                  <td><?= $v_pre_order->id_supplier?></td>
-                  <td><?= $v_pre_order->id_gudang_tujuan?></td>
-                  <td><?= $v_pre_order->kode_pre_order?></td>
+                  <td><?= $v_pre_order->kode_supplier.' - '.$v_pre_order->nama_supplier.' ('.$v_pre_order->telepon_supplier.')'?></td>
+                  <td><?= $v_pre_order->kode_gudang.' <br> '.$v_pre_order->alamat.', '.$v_pre_order->kabupaten_kota.' <br> '.$v_pre_order->provinsi.' ('.$v_pre_order->kode_pos.')'?></td>
+                  <td><?= $v_pre_order->tanggal_dibuat_formatted?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deletePreOrder(<?= $v_pre_order->id_pre_order?>)">
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalPreOrder()">
-                      <i class="material-icons">
-                        create
-                      </i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-danger btn-sm btn-block" onclick="deletePreOrder(<?= $v_pre_order->id_pre_order?>)">
+                          <i class="material-icons">
+                            delete
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-6 px-1">
+                        <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-pre-order/').$v_pre_order->id_pre_order?>">
+                          <i class="material-icons">
+                            search
+                          </i>
+                        </a>
+                      </div>
+                      <div class="col-md-12 px-1">
+                        <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-pre-order/').$v_pre_order->id_pre_order?>">
+                          <i class="material-icons">
+                            print
+                          </i> Surat
+                        </a>
+                      </div>
+                      <div class="col-md-12 px-1">
+                        <a class="btn btn-warning btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-barcode-pre-order/').$v_pre_order->id_pre_order?>">
+                          <i class="material-icons">
+                            print
+                          </i> Barcode
+                        </a>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -99,7 +119,6 @@
       <div class="modal-body">
         <div class="row mt-3">
             <div class="col-md-6">
-
               <div class="form-group">
                 <label for="autocomplete_insert_pre_order_id_supplier"> Supplier</label>
                 <input type="hidden" name="insert_id_supplier">
@@ -109,22 +128,39 @@
                   class="form-control" required="true"/>
                 <small class="text-danger"><?php echo form_error('insert_id_supplier'); ?></small>
               </div>
-
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="autocomplete_insert_pre_order_id_gudang_tujuan" > Gudang Tujuan</label>
                 <input type="hidden" name="insert_id_gudang_tujuan">
 
-                <input type="text" name="auto_complete_insert_id_gudang_tujuan"
+                <input type="text" name="autocomplete_insert_id_gudang_tujuan"
                   value="<?php echo set_value('insert_id_gudang_tujuan'); ?>" id="autocomplete_insert_pre_order_id_gudang_tujuan"
                   class="form-control" required="true"/>
                 <small class="text-danger"><?php echo form_error('insert_id_gudang_tujuan'); ?></small>
               </div>
             </div>
         </div>
-        
-
+        <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="insert_pre_order_tanggal_dibuat">Tanggal Terbit</label>
+                <input type="date" name="insert_tanggal_dibuat"
+                  value="<?php echo set_value('insert_tanggal_dibuat'); ?>" id="insert_pre_order_tanggal_dibuat"
+                  class="form-control" required="true"/>
+                <small class="text-danger"><?php echo form_error('insert_tanggal_dibuat'); ?></small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="insert_pre_order_tanggal_setor">Tanggal Setor</label>
+                <input type="date" name="insert_tanggal_setor"
+                  value="<?php echo set_value('insert_tanggal_setor'); ?>" id="insert_pre_order_tanggal_setor"
+                  class="form-control" required="true"/>
+                <small class="text-danger"><?php echo form_error('insert_tanggal_setor'); ?></small>
+              </div>
+            </div>
+        </div>
 
         <div class="rincian_barang_container">
         
@@ -151,7 +187,7 @@
                 <label>Jumlah</label>
                 <input type="number" name="insert_jumlah_barang[0]"
                   value="<?php echo set_value('insert_jumlah_barang'); ?>"
-                  class="form-control" required="true" />
+                  class="form-control" required="true" min="0"/>
                 <small class="text-danger"><?php echo form_error('insert_jumlah_barang'); ?></small>
               </div>
             </div>
@@ -167,24 +203,23 @@
             </div>
 
             <div class="col-sm-2 d-flex justify-content-center align-items-center p-0">
-              <button type="button" class="btn btn-danger btn-outline-primary btn-sm remove_rincian_barang">
-                <span class="material-icons text-danger">
+              <button type="button" class="btn btn-danger btn-sm remove_rincian_barang">
+                <span class="material-icons">
                   remove_circle
                 </span> Hapus
               </button>
             </div>
-
+            
           </div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-md-3">
-                <button class="btn btn-link btn-primary btn-block mt-3 mb-5" onclick="tambah_rincian_barang()" type="button">
+                <button class="btn btn-sm btn-outline-primary btn-block mt-3 mb-5" onclick="tambah_rincian_barang()" type="button">
                   Tambah Item
                 </button>
             </div>
         </div>
-
 
       </div>
 
@@ -270,7 +305,7 @@
     $supplier_lookup = [];
     foreach ($data_supplier as $k => $v) {
       $supplier_lookup[] = array(
-        "value" => $v->nama.' - '.$v->alamat,
+        "value" => $v->nama_supplier.' - '.$v->alamat_supplier,
         "code" => $v->id_supplier
       );
     }
@@ -292,7 +327,11 @@
 
     $cloned_element.find('[name="autocomplete_insert_id_barang[0]"]').attr("name", "autocomplete_insert_id_barang["+$element_index+"]").val(null);
     $cloned_element.find('[name="insert_jumlah_barang[0]"]').attr("name", "insert_jumlah_barang["+$element_index+"]").val(null);
+    $cloned_element.find('[name="insert_keterangan[0]"]').attr("name", "insert_keterangan["+$element_index+"]").val(null);
 
+    
+    $cloned_element.find('[name="autocomplete_insert_id_barang[0]"]').focus();
+    
     md.setInputAutoComplete($cloned_element.find('[name="autocomplete_insert_id_barang['+$element_index+']"]'), $barang);
   }
   
@@ -305,7 +344,9 @@
     
   $('#modalTambahPreOrder').on('click', '.remove_rincian_barang', function(){
     if($('.input_barang').length > 1){
-      $(this).parents('.input_barang').remove();
+      $(this).parents('.input_barang').fadeOut(function(){
+        $(this).remove();
+      })
     }
   })
 
@@ -316,9 +357,9 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 }
+        { "width": "15%", "targets": -1 }
       ],
-      responsive: true
+      responsive: false
     });
 
     // $('#insert_pre_order_id_gudang_tujuan').autocomplete({

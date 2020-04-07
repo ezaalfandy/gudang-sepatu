@@ -11,10 +11,21 @@ class Base extends MY_Controller {
         $this->load->model('Base_model');
     }
     
-    public function index()
-    {
-        
+    public function _remap($method, $params = array()){
+        $controller = mb_strtolower(get_class($this));
+        $uri_controller = str_replace('-', '_', mb_strtolower($this->uri->segment(1)));
+        if( $uri_controller == $controller){
+            show_404();
+        }else
+        {   
+            if(method_exists($this, $method)){
+                return call_user_func_array(array($this, $method), $params);
+            }else{
+                show_404();
+            }
+        }
     }
+
 
 }
 

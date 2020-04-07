@@ -113,7 +113,8 @@ if ( ! function_exists('mdate'))
 		$datestr = str_replace(
 			'%\\',
 			'',
-			preg_replace('/([a-z]+?){1}/i', '\\\\\\1', $datestr)
+			preg_replace('/([a-z]+?)
+        {1}/i', '\\\\\\1', $datestr)
 		);
 
 		return date($datestr, $time);
