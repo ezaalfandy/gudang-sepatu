@@ -35,12 +35,6 @@
           <h4 class="card-title ">Data Hand Over On Proses</h4>
         </div>
         <div class="card-body">
-          <div class="col-lg-3 offset-lg-9">
-            <a class="btn btn-primary btn-block my-4" href="<?= base_url('asisten-manager-gudang/view-insert-hand-over')?>" target="_blank">
-              <i class="material-icons">add</i>
-              Tambah
-            </a>
-          </div>
           <div class="table-responsive pb-5">
             <table class="table table-striped table-hovered tableHandOver">
               <thead>
@@ -64,28 +58,20 @@
                       <td><?= $v_hand_over->tanggal_dibuat_formatted?></td>
                       <td>
                         <div class="row">
-                          <div class="col-md-12 px-1">
-                            <button class="btn btn-success btn-sm btn-block" onclick="terimaHandOver(<?= $v_hand_over->id_hand_over?>)">
-                              Terima
-                            </button>
-                          </div>
-                          <div class="col-md-6 px-1">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-hand-over/').$v_hand_over->id_hand_over?>">
-                              Edit
-                            </a>
-                          </div>
-                          <div class="col-md-6 px-1">
-                            <button class="btn btn-danger btn-sm btn-block" onclick="deleteHandOver(<?= $v_hand_over->id_hand_over?>)">
-                              Hapus
-                            </button>
-                          </div>
-                          <div class="col-md-12 px-1">
-                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
-                              <i class="material-icons">
-                                print
-                              </i> Surat
-                            </a>
-                          </div>
+                            <?php if($v_hand_over->id_gudang_asal != $this->session->userdata('id_gudang')):?>
+                                <div class="col-md-12 px-1">
+                                    <button class="btn btn-success btn-sm btn-block" onclick="terimaHandOver(<?= $v_hand_over->id_hand_over?>)">
+                                    Terima
+                                    </button>
+                                </div>
+                            <?php endif;?>
+                            <div class="col-md-12 px-1">
+                                <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
+                                <i class="material-icons">
+                                    print
+                                </i> Surat
+                                </a>
+                            </div>
                         </div>
                       </td>
                     </tr>
@@ -130,18 +116,8 @@
                       <td><?= $v_hand_over->tanggal_dibuat_formatted?></td>
                       <td>
                         <div class="row">
-                          <div class="col-md-6 px-1">
-                            <button class="btn btn-danger btn-sm btn-block" onclick="deleteHandOver(<?= $v_hand_over->id_hand_over?>)">
-                              Hapus
-                            </button>
-                          </div>
-                          <div class="col-md-6 px-1">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-hand-over/').$v_hand_over->id_hand_over?>">
-                              Edit
-                            </a>
-                          </div>
                           <div class="col-md-12 px-1">
-                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
+                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
                               <i class="material-icons">
                                 print
                               </i> Surat
@@ -185,24 +161,6 @@
       });
     }).draw();
   });
-
-  function deleteHandOver($id_hand_over) 
-  {
-    swal({
-      title: 'Apakah Anda Yakin ?',
-      text: "Data Hand Over akan dihapus dan tidak dapat dikembalikan !",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonClass: 'btn btn-danger',
-      cancelButtonClass: 'btn btn-default btn-link',
-      confirmButtonText: 'Ya, Hapus',
-      buttonsStyling: false
-    }).then(function (result) {
-      if (result.value === true) {
-        window.location.href = "<?= base_url('asisten-manager-gudang/delete-hand-over/')?>" + $id_hand_over;
-      }
-    })
-  }
   
   function terimaHandOver($id_hand_over) {
     swal({
@@ -216,7 +174,7 @@
       buttonsStyling: false
     }).then(function (result) {
       if (result.value === true) {
-        window.location.href = "<?= base_url('asisten-manager-gudang/terima-hand-over/')?>" + $id_hand_over;
+        window.location.href = "<?= base_url('admin-gudang/terima-hand-over/')?>" + $id_hand_over;
       }
     })
   }

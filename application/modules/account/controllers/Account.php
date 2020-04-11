@@ -16,37 +16,34 @@
         {
             if ($this->session->userdata('level') == 'asisten_manager_gudang') {
                 redirect('Asisten-manager-gudang');
-            }else if ($this->session->userdata('level') == 'sekretariat') {
-                redirect('Sekretariat');
-            }else if ($this->session->userdata('level') == 'perangkat_pertandingan'){
-                redirect('Perangkat_pertandingan');
-            }elseif ($this->session->userdata('level') == "bendahara") {
-                redirect('Bendahara');
-            }elseif ($this->session->userdata('level') == "printer") {
-                redirect('Printer');
-            }elseif ($this->session->userdata('level') == "admin_check_in") {
-                redirect('Admin_check_in');
-            }elseif ($this->session->userdata('level') == "announcer_dalam") {
-                redirect('Announcer_dalam');
             }else{
-                $this->load->view('account/login');
+                $this->load->view('account/login_admin');
+            }
+        }
+
+        public function management(){
+            if ($this->session->userdata('level') == 'asisten_manager_gudang') {
+                redirect('Asisten-manager-gudang');
+            }else{
+                $this->load->view('account/login_management');
             }
         }
 
         public function login_management(){
             if ($this->Account_model->login_management() == "asisten_manager_gudang") {
                 redirect('Asisten-manager-gudang');
-            }else if ($this->Account_model->login_management() == "sekretariat") {
-                redirect('Sekretariat');
-            }elseif ($this->Account_model->login_management() == "perangkat_pertandingan") {
-                redirect('Perangkat_pertandingan');
-            }elseif ($this->Account_model->login_management() == "bendahara") {
-                redirect('Bendahara');
-            }elseif ($this->Account_model->login_management() == "printer") {
-                redirect('Printer');
             }else {
                 $this->session->set_flashdata('message', 'Username Atau Password Salah !');
-                redirect('Account');
+                $this->load->view('account/login_management');
+            }
+        }
+
+        public function login_admin_gudang(){
+            if ($this->Account_model->login_admin_gudang() == true) {
+                redirect('admin-gudang');
+            }else {
+                $this->session->set_flashdata('message', 'Username Atau Password Salah !');
+                $this->load->view('account/login_admin');
             }
         }
 

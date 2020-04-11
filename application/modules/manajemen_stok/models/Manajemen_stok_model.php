@@ -114,6 +114,14 @@ class Manajemen_stok_model extends CI_Model {
 
         return true;
     }
+
+    public function get_specific_stok_barang($where){
+        return $this->db->join('barang', 'barang.id_barang = stok_barang.id_barang')
+                        ->join('gudang', 'gudang.id_gudang = stok_barang.id_gudang')
+                        ->where($where)
+                        ->get('stok_barang')
+                        ->result();
+    }
     
 
 }

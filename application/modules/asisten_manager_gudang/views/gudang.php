@@ -115,16 +115,29 @@
                   <td><?= $v_gudang->alamat.'.<br>'.$v_gudang->kabupaten_kota.' - '.$v_gudang->provinsi.' ('.$v_gudang->kode_pos.')'?></td>
                   <td><?= $v_gudang->nomor_telepon?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteGudang(<?= $v_gudang->id_gudang?>)">
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalGudang(<?= $v_gudang->id_gudang?>)">
-                      <i class="material-icons">
-                        create
-                      </i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-danger btn-sm btn-block" onclick="deleteGudang(<?= $v_gudang->id_gudang?>)">
+                          <i class="material-icons">
+                            delete
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-info btn-sm btn-block" onclick="openModalGudang(<?= $v_gudang->id_gudang?>)">
+                          <i class="material-icons">
+                            create
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-12 px-1">
+                        <a class="btn btn-primary btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-gudang/'.$v_gudang->kode_gudang)?>">
+                          <i class="material-icons">
+                            search
+                          </i>Detail
+                        </a>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -218,7 +231,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 }
+        { "width": "20%", "targets": -1 }
       ],
       responsive: false
     });

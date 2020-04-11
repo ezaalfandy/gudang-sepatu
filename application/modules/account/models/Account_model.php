@@ -50,14 +50,15 @@ class Account_model extends CI_Model {
 
 			if ($this->db->affected_rows() > 0) {
 				$array = array(
-					'level' => $query->row('level'),
+					'level' => 'admin_gudang',
 					'username' => $query->row('username'),
 					'nama' => $query->row('nama'),
 					'foto' => $query->row('foto'),
-					'id_admin' => $query->row('id_admin')
+					'id_admin' => $query->row('id_admin_gudang'),
+					'id_gudang' => $query->row('id_gudang')
 				);
 				$this->session->set_userdata( $array );
-				return $query->row('level');
+				return true;
 			}else{
 				return false;
 			}

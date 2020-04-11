@@ -243,7 +243,7 @@
     $gudang_lookup = [];
     foreach ($data_gudang as $k => $v) {
       $gudang_lookup[] = array(
-        "value" => $v->alamat.' - '.$v->kode_pos,
+        "value" => $v->kode_gudang.' - '.$v->kabupaten_kota,
         "code" => $v->id_gudang
       );
     }

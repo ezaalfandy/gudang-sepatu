@@ -42,7 +42,7 @@
 
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="rose" data-background-color="black" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
+    <div class="sidebar" data-color="white" data-background-color="red" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
       <div class="logo">
         <a href="javascript:void(0)" class="simple-text logo-mini">
           JM
@@ -89,55 +89,25 @@
         </div>
         <ul class="nav">
           <li class="nav-item <?php if($this->uri->segment(2) == 'dashboard'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/dashboard')?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/dashboard')?>">
               <i class="material-icons">dashboard</i>
               <p> Dashboard </p>
             </a>
           </li>
-          <li class="nav-item <?php if($this->uri->segment(2) == 'view-gudang'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-gudang')?>">
-              <i class="material-icons">home</i>
-              <p>Gudang</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link <?php if($this->uri->segment(2) == 'view-supplier'){echo 'active';}?>" href="<?= base_url('asisten-manager-gudang/view-supplier')?>">
-              <i class="material-icons">person</i>
-              <p> Supplier</p>
-            </a>
-          </li>
-          <li class="nav-item <?php if($this->uri->segment(2) == 'view-barang' || $this->uri->segment(2) == 'view-aturan-barcode'){echo 'active';}?>">
-            <a class="nav-link collapsed" data-toggle="collapse" href="#formsExamples" aria-expanded="false">
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-stok-barang'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/view-stok-barang')?>">
               <i class="material-icons">assessment</i>
-              <p> Barang
-                <b class="caret"></b>
-              </p>
+              <p>Stok Barang</p>
             </a>
-            <div class="collapse" id="formsExamples" style="">
-              <ul class="nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-aturan-barcode')?>">
-                    <span class="sidebar-mini"> AB </span>
-                    <span class="sidebar-normal"> Aturan Barcode </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-barang')?>">
-                    <span class="sidebar-mini"> DB </span>
-                    <span class="sidebar-normal"> Daftar Barang </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
           </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-pre-order'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-pre-order')?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/view-pre-order')?>">
               <i class="material-icons">insert_drive_file</i>
               <p> Pre Order</p>
             </a>
           </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-hand-over'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-hand-over')?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/view-hand-over')?>">
               <i class="material-icons">compare_arrows</i>
               <p>Hand Over</p>
             </a>

@@ -12,116 +12,85 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="table-responsive table-sales">
-                                <table class="table">
-                                <tbody>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/US.png" <="" div="">
-                                    </div></td>
-                                    <td>USA</td>
-                                    <td class="text-right">
-                                        2.920
-                                    </td>
-                                    <td class="text-right">
-                                        53.23%
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/DE.png" <="" div="">
-                                    </div></td>
-                                    <td>Germany</td>
-                                    <td class="text-right">
-                                        1.300
-                                    </td>
-                                    <td class="text-right">
-                                        20.43%
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/AU.png" <="" div="">
-                                    </div></td>
-                                    <td>Australia</td>
-                                    <td class="text-right">
-                                        760
-                                    </td>
-                                    <td class="text-right">
-                                        10.35%
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/GB.png" <="" div="">
-                                    </div></td>
-                                    <td>United Kingdom</td>
-                                    <td class="text-right">
-                                        690
-                                    </td>
-                                    <td class="text-right">
-                                        7.87%
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/RO.png" <="" div="">
-                                    </div></td>
-                                    <td>Romania</td>
-                                    <td class="text-right">
-                                        600
-                                    </td>
-                                    <td class="text-right">
-                                        5.94%
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    <td>
-                                        <div class="flag">
-                                        <img src="../assets/img/flags/BR.png" <="" div="">
-                                    </div></td>
-                                    <td>Brasil</td>
-                                    <td class="text-right">
-                                        550
-                                    </td>
-                                    <td class="text-right">
-                                        4.34%
-                                    </td>
-                                    </tr>
-                                </tbody>
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                No
+                                            </th>
+                                            <th>
+                                                Gudang
+                                            </th>
+                                            <th>
+                                                Stok
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $n= 1;?>
+                                        <?php foreach ($data_stok_barang as $key => $value):?>
+                                            <tr>   
+                                                <td>
+                                                    <?= $n++;?>
+                                                </td>
+                                                <td>
+                                                    <?= $value->kode_gudang.' - '.$value->alamat.', '.$value->kabupaten_kota.' '.$value->provinsi.' ('.$value->nomor_telepon.')'?>
+                                                </td>
+                                                <td class="text-right">
+                                                    <?= $value->jumlah_stok?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <div class="col-md-4">
-                            <div id="carouselId" class="carousel slide" data-ride="carousel">
+                            <div id="carouselGambarBarang" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
-                                <li data-target="#carouselId" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselId" data-slide-to="1"></li>
-                                <li data-target="#carouselId" data-slide-to="2"></li>
+                                    <?php
+                                        for ($i=0; $i < count($data_gambar_barang); $i++) 
+                                        {
+                                            if($i == 0)
+                                            {
+                                                echo '<li data-target="#carouselGambarBarang" data-slide-to="0" class="active"></li>';
+                                            }else
+                                            {
+                                                echo '<li data-target="#carouselGambarBarang" data-slide-to="'.$i.'"></li>';
+                                            }
+                                        }
+                                    ?>
                                 </ol>
                                 <div class="carousel-inner" role="listbox">
-                                <div class="carousel-item active">
-                                    <img data-src="holder.js/900x500/auto/#777:#555/text:First slide" alt="First slide">
+                                    <?php
+                                        for ($i=0; $i < count($data_gambar_barang); $i++) 
+                                        {
+                                            if($i == 0)
+                                            {   
+                                                echo '
+                                                    <div class="carousel-item active">
+                                                        <img src="'.base_url('uploads/barang/').$data_gambar_barang[$i]->nama_file.'" alt="'.$i.'slide" class="img-fluid">
+                                                    </div>
+                                                ';
+                                            }else
+                                            {
+                                                echo '
+                                                    <div class="carousel-item">
+                                                        <img src="'.base_url('uploads/barang/').$data_gambar_barang[$i]->nama_file.'" alt="'.$i.'slide"  class="img-fluid">
+                                                    </div>
+                                                ';
+                                            }
+                                        }
+                                    ?>
                                 </div>
-                                <div class="carousel-item">
-                                    <img data-src="holder.js/900x500/auto/#666:#444/text:Second slide" alt="Second slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img data-src="holder.js/900x500/auto/#666:#444/text:Third slide" alt="Third slide">
-                                </div>
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselId" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
+                                <a class="carousel-control-prev" href="#carouselGambarBarang" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
                                 </a>
-                                <a class="carousel-control-next" href="#carouselId" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
+                                <a class="carousel-control-next" href="#carouselGambarBarang" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
                                 </a>
                             </div>
                         </div>

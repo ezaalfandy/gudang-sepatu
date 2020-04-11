@@ -57,9 +57,9 @@
                     <thead>
                         <tr>
                             <td>No</td>
-                            <td>Barang</td>
+                            <td>Kode</td>
+                            <td>Nama Barang</td>
                             <td>Jumlah</td>
-                            <td>Keterangan</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,9 +67,9 @@
                         <?php foreach($data_detail_hand_over as $k_detail_hand_over => $v_detail_hand_over):?>
                             <tr>
                                 <td><?= $n++; ?></td>
+                                <td><?= $v_detail_hand_over->kode_barang; ?></td>
                                 <td><?= $v_detail_hand_over->merek.' '.$v_detail_hand_over->tipe.' '.$v_detail_hand_over->warna.' '.$v_detail_hand_over->ukuran ?></td>
-                                <td><?= $v_detail_hand_over->jumlah ?></td>
-                                <td><?= $v_detail_hand_over->keterangan ?></td>
+                                <td><?= $v_detail_hand_over->jumlah.' '.$v_detail_hand_over->satuan ?></td>
                             </tr>
                         <?php endforeach;?>
                     </tbody>

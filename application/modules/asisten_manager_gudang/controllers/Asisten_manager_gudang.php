@@ -53,7 +53,28 @@
                 redirect('Account');
             }
         }
-                      
+        
+        public function view_detail_gudang()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $data['data_gudang'] = $this->Base_model->get_specific('gudang', array('kode_gudang' => $this->uri->segment(3)));
+                if($data['data_gudang'] !== null)
+                {   
+                    $id_gudang = $data['data_gudang']->id_gudang;
+                    $data['data_stok_barang'] = $this->manajemen_stok->get_specific_stok_barang(array('stok_barang.id_gudang' => $id_gudang));
+                    $data['main_view'] = 'detail_gudang';
+                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                }else
+                {
+                    $this->page_missing();
+                }
+                
+            }else{
+                redirect('Account');
+            }
+        }
+
         public function insert_gudang()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -546,10 +567,13 @@
         public function view_detail_barang()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $data['data_barang'] = $this->Base_model->get_specific('barang', array('kode_barang' => $this->uri->segment(3)));
                 if($data['data_barang'] !== null)
-                {
+                {   
+                    $id_barang = $data['data_barang']->id_barang;
+                    $data['data_gambar_barang'] = $this->Base_model->get_all_specific('gambar_barang', array('id_barang' => $id_barang ));
+                    $data['data_stok_barang'] = $this->manajemen_stok->get_specific_stok_barang(array('stok_barang.id_barang' => $id_barang));
                     $data['main_view'] = 'detail_barang';
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
                 }else
@@ -607,7 +631,7 @@
                     $kode_barang = $kode_merek.$tipe.$kode_warna.$ukuran;
 
                     $config['upload_path'] = './uploads/barang/';
-                    $config['allowed_types'] = 'gif|jpg|png';
+                    $config['allowed_types'] = 'gif|jpg|png|jpeg';
                     $config['max_size']  = '9000'; //diubah
                     
                     $file_gambar = [];
@@ -646,7 +670,7 @@
                             );
                                 
                             $this->session->set_flashdata($array);
-                            $this->view_barang();
+                            redirect('asisten-manager-gudang/view_barang');
                         }
                         
                     }
@@ -810,6 +834,22 @@
             {   
                 $result = $this->Base_model->get_specific('barang', array('id_barang' => $this->uri->segment(3)));
                 echo json_encode($result);
+            }else
+            {
+                redirect('Account');
+            }
+        }     
+
+        public function get_specific_stok_barang()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {   
+                $where = array(
+                    'stok_barang.id_gudang' => $this->uri->segment(3),
+                    'jumlah_stok >' => "0"
+                ); 
+                
+                echo $this->manajemen_stok->get_specific_stok_barang($where, TRUE);
             }else
             {
                 redirect('Account');
@@ -990,7 +1030,7 @@
         public function view_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $data['data_pre_order'] = $this->pre_order->get_all_pre_order();
                 $data['data_gudang'] = $this->Base_model->get_all('gudang');
                 $data['data_supplier'] = $this->Base_model->get_all('supplier');
@@ -1002,15 +1042,54 @@
             }
         }
 
+        public function view_insert_pre_order()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $data['data_pre_order'] = $this->pre_order->get_all_pre_order();
+                $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                $data['data_supplier'] = $this->Base_model->get_all('supplier');
+                $data['data_barang'] = $this->Base_model->get_all('barang');
+                $data['main_view'] = 'insert_pre_order';
+                $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('Account');
+            }
+        }
+
         public function view_detail_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $id_pre_order = $this->uri->segment(3);
-                $data['data_pre_order'] = $this->Pre_order_model->get_specific_pre_order(array('id_pre_order' => $id_pre_order));
-                $data['data_detail_pre_order'] = $this->Pre_order_model->get_all_detail_pre_order_by_id_pre_order($id_pre_order);
+                $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('id_pre_order' => $id_pre_order));
+                $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $id_pre_order));
                 $data['main_view'] = 'detail_pre_order';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('Account');
+            }
+        }
+
+        public function view_edit_pre_order($id_pre_order = null)
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $id_pre_order = ($this->uri->segment(3) == null) ? $id_pre_order : $this->uri->segment(3);
+                $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('id_pre_order' => $id_pre_order));
+
+                if($data['data_pre_order'] !== null)
+                {
+                    $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                    $data['data_supplier'] = $this->Base_model->get_all('supplier');
+                    $data['data_barang'] = $this->Base_model->get_all('barang');
+                    $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $id_pre_order));
+                    $data['main_view'] = 'edit_pre_order';
+                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                }else
+                {
+                    $this->page_missing();
+                }
             }else{
                 redirect('Account');
             }
@@ -1019,7 +1098,7 @@
         public function cetak_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $this->pre_order->cetak_pre_order($this->uri->segment(3));
             }else{
                 redirect('Account');
@@ -1029,7 +1108,7 @@
         public function cetak_barcode_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $this->pre_order->cetak_barcode_pre_order($this->uri->segment(3));
             }else{
                 redirect('Account');
@@ -1040,34 +1119,71 @@
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {   
-                $id_pre_order = $this->pre_order->insert_pre_order();
+                
+                $config = array(
+                    array(
+                        'field' => 'insert_id_supplier',
+                        'label' => ' Id Supplier',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'insert_id_gudang_tujuan',
+                        'label' => ' Id Gudang Tujuan',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'insert_tanggal_dibuat',
+                        'label' => 'Tanggal dibuat',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'insert_tanggal_setor',
+                        'label' => 'Tanggal Setor',
+                        'rules' => 'required'
+                    )
+                );
 
-                if($id_pre_order !== false)
-                {
+                $this->form_validation->set_rules($config);
+                if($this->form_validation->run() == TRUE) 
+                {   
+                    $id_pre_order = $this->pre_order->insert_pre_order();
 
-                    if($this->pre_order->insert_detail_pre_order($id_pre_order) == true)
+                    if($id_pre_order !== false)
                     {
-                        $array = array(
-                            'status' => 'success',
-                            'message' => 'Berhasil Input Data'
-                        );
-                    }else{
+                        if($this->pre_order->insert_detail_pre_order($id_pre_order) == true)
+                        {
+                            $array = array(
+                                'status' => 'success',
+                                'message' => 'Berhasil Input Data Pre order, <a href="'.base_url('asisten-manager-gudang/cetak-pre-order/').$id_pre_order.'" target="_blank"><u>Cetak barcode sekarang</u></a>'
+                            );
+                        }else{
+                            $array = array(
+                                'status' => 'failed',
+                                'message' => 'Gagal Input Data Pre Order'
+                            );
+                        }
+                        
+                        $this->session->set_flashdata($array);
+                        redirect('asisten-manager-gudang/view-insert-pre-order');
+                    }else
+                    {
                         $array = array(
                             'status' => 'failed',
                             'message' => 'Gagal Input Data Pre Order'
                         );
+                        $this->session->set_flashdata($array);
+                        $this->view_insert_pre_order();
                     }
                     
-                }else
-                {
+                }else{
+                    //VALIDASI GAGAL
                     $array = array(
                         'status' => 'failed',
-                        'message' => 'Gagal Input Data Pre Order'
+                        'message' => validation_errors(' ', '')
                     );
+                    $this->session->set_flashdata($array);
+                    $this->view_insert_pre_order();
                 }
-                
-                $this->session->set_flashdata($array);
-                redirect('asisten-manager-gudang/view-pre-order');
             }else
             {
                 redirect('Account');
@@ -1091,7 +1207,31 @@
                     );
                 }
                 $this->session->set_flashdata($array);
-                redirect('asisten-manager-gudang/view-pre_order');
+                redirect('asisten-manager-gudang/view-pre-order');
+            }else
+            {
+                redirect('Account');
+            }
+        }   
+
+        public function terima_pre_order()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                if($this->pre_order->terima_pre_order($this->uri->segment(3))  == true)
+                {
+                    $array = array(
+                        'status' => 'success',
+                        'message' => 'Pre order berhasil diterima'
+                    );
+                }else{
+                    $array = array(
+                        'status' => 'failed',
+                        'message' => 'Pre order gagal diterima'
+                    );
+                }
+                $this->session->set_flashdata($array);
+                redirect('asisten-manager-gudang/view-pre-order');
             }else
             {
                 redirect('Account');
@@ -1101,57 +1241,71 @@
         public function edit_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-            {        
+            {   
                 $config = array(
-                            array(
-                                'field' => 'edit_id_admin',
-                                'label' => ' Id Admin',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_id_supplier',
-                                'label' => ' Id Supplier',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_id_gudang_tujuan',
-                                'label' => ' Id Gudang Tujuan',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_kode_pre_order',
-                                'label' => ' Kode Pre Order',
-                                'rules' => 'required'
-                            )
-                    );
-                
+                    array(
+                        'field' => 'edit_id_supplier',
+                        'label' => ' Id Supplier',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'edit_id_gudang_tujuan',
+                        'label' => ' Id Gudang Tujuan',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'edit_tanggal_dibuat',
+                        'label' => 'Tanggal dibuat',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'edit_tanggal_setor',
+                        'label' => 'Tanggal Setor',
+                        'rules' => 'required'
+                    )
+                );
+        
                 $this->form_validation->set_rules($config);
                 if($this->form_validation->run() == TRUE) 
                 {
-                    $array_model = array(
-                        'id_pre_order' => $this->input->post('edit_id_pre_order', TRUE),
-                        'id_admin' => $this->input->post('edit_id_admin', TRUE),
-                        'id_supplier' => $this->input->post('edit_id_supplier', TRUE),
-                        'id_gudang_tujuan' => $this->input->post('edit_id_gudang_tujuan', TRUE),
-                        'kode_pre_order' => $this->input->post('edit_kode_pre_order', TRUE)
-                    );
-                        $id_pre_order = $this->input->post('edit_id_pre_order', TRUE);
-                        if($this->Base_model->edit('pre_order', array("id_pre_order" => $id_pre_order), $array_model) == TRUE)
+
+                    $id_pre_order = $this->input->post('edit_id_pre_order', TRUE);
+                    $edit_pre_order = $this->pre_order->edit_pre_order($id_pre_order);
+    
+                    if($edit_pre_order !== false)
+                    {
+                        if($this->pre_order->edit_detail_pre_order($id_pre_order) == true)
                         {
                             $array = array(
                                 'status' => 'success',
-                                'message' => 'Berhasil Edit Data'
+                                'message' => 'Berhasil Edit Data Pre order, <a href="'.base_url('asisten-manager-gudang/cetak-barcode-pre-order/').$id_pre_order.'" target="_blank"><u>Cetak barcode sekarang</u></a>'
                             );
                         }else{
                             $array = array(
                                 'status' => 'failed',
-                                'message' => 'Gagal Edit Data'
+                                'message' => 'Gagal Edit Data Pre Order 2'
                             );
                         }
-                        $this->session->set_flashdata($array);
-                        redirect('asisten-manager-gudang/view-pre-order');
+                        
+                    }else
+                    {
+                        //insert table pre order gagal
+                        $array = array(
+                            'status' => 'failed',
+                            'message' => 'Gagal Edit Data Pre Order 1'
+                        );
+                    }
+
+                    $this->session->set_flashdata($array);
+                    redirect('asisten-manager-gudang/view-edit-pre-order/'.$id_pre_order);
                 }else{
-                    $this->view_pre_order();
+                    //Validasi gagal
+                    $array = array(
+                        'status' => 'failed',
+                        'message' => validation_errors(' ', '')
+                    );
+                    $this->session->set_flashdata($array);
+                    $this->view_edit_pre_order($this->input->post('edit_id_pre_order', TRUE));
                 }
                 
             }else
@@ -1159,7 +1313,35 @@
                 redirect('Account');
             }
         }
-                              
+        
+        public function view_edit_hand_over($id_hand_over = null)
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $id_hand_over = ($this->uri->segment(3) == null) ? $id_hand_over : $this->uri->segment(3);
+                $data['data_hand_over'] = $this->hand_over->get_specific_hand_over(array('id_hand_over' => $id_hand_over));
+                
+                if($data['data_hand_over'] !== null)
+                {
+                    
+                    $where_stok_barang = array(
+                        'stok_barang.id_gudang' => $data['data_hand_over']->id_gudang_asal,
+                        'jumlah_stok >' => "0"
+                    ); 
+                    $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                    $data['data_barang'] = $this->manajemen_stok->get_specific_stok_barang($where_stok_barang);
+                    $data['data_detail_hand_over'] = $this->hand_over->get_all_specific_detail_hand_over(array('id_hand_over' => $id_hand_over));
+                    $data['main_view'] = 'edit_hand_over';
+                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                }else
+                {
+                    $this->page_missing();
+                }
+            }else{
+                redirect('Account');
+            }
+        }
+
         public function get_specific_pre_order()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -1172,11 +1354,10 @@
             }
         }
                             
-        
         public function view_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $data['data_hand_over'] = $this->hand_over->get_all_hand_over();
                 $data['data_gudang'] = $this->Base_model->get_all('gudang');
                 $data['data_supplier'] = $this->Base_model->get_all('supplier');
@@ -1188,14 +1369,15 @@
             }
         }
 
-        public function view_detail_hand_over()
+        public function view_insert_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
-                $id_hand_over = $this->uri->segment(3);
-                $data['data_hand_over'] = $this->hand_over_model->get_specific_hand_over(array('id_hand_over' => $id_hand_over));
-                $data['data_detail_hand_over'] = $this->hand_over_model->get_all_detail_hand_over_by_id_hand_over($id_hand_over);
-                $data['main_view'] = 'detail_hand_over';
+            {
+                $data['data_pre_order'] = $this->pre_order->get_all_pre_order();
+                $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                $data['data_supplier'] = $this->Base_model->get_all('supplier');
+                $data['data_barang'] = $this->Base_model->get_all('barang');
+                $data['main_view'] = 'insert_hand_over';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
                 redirect('Account');
@@ -1205,8 +1387,9 @@
         public function cetak_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
-                $this->hand_over->cetak_hand_over($this->uri->segment(3));
+            {
+                $id_hand_over = $this->uri->segment(3);
+                $this->hand_over->cetak_hand_over(array('id_hand_over' => $id_hand_over));
             }else{
                 redirect('Account');
             }
@@ -1216,33 +1399,66 @@
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {   
-                $id_hand_over = $this->hand_over->insert_hand_over();
+                
+                $config = array(
+                    array(
+                        'field' => 'insert_id_gudang_asal',
+                        'label' => ' Id Gudang Asal',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'insert_id_gudang_tujuan',
+                        'label' => ' Id Gudang Tujuan',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'insert_tanggal_dibuat',
+                        'label' => 'Tanggal dibuat',
+                        'rules' => 'required'
+                    )
+                );
 
-                if($id_hand_over !== false)
-        {
+                $this->form_validation->set_rules($config);
+                if($this->form_validation->run() == TRUE) 
+                {   
+                    $id_hand_over = $this->hand_over->insert_hand_over();
 
-                    if($this->hand_over->insert_detail_hand_over($id_hand_over) == true)
+                    if($id_hand_over !== false)
                     {
-                        $array = array(
-                            'status' => 'success',
-                            'message' => 'Berhasil Input Data'
-                        );
-                    }else{
+                        if($this->hand_over->insert_detail_hand_over($id_hand_over) == true)
+                        {
+                            $array = array(
+                                'status' => 'success',
+                                'message' => 'Berhasil input data hand over, <a href="'.base_url('asisten-manager-gudang/cetak-pre-order/').$id_hand_over.'" target="_blank"><u>Cetak surat pre order sekarang</u></a>'
+                            );
+                        }else{
+                            $array = array(
+                                'status' => 'failed',
+                                'message' => 'Gagal input data hand over'
+                            );
+                        }
+                        
+                        $this->session->set_flashdata($array);
+                        redirect('asisten-manager-gudang/view-insert-hand-over');
+                    }else
+                    {
                         $array = array(
                             'status' => 'failed',
                             'message' => 'Gagal Input Data Hand over'
                         );
+                        $this->session->set_flashdata($array);
+                        $this->view_insert_hand_over();
                     }
                     
                 }else{
+                    //VALIDASI GAGAL
                     $array = array(
                         'status' => 'failed',
-                        'message' => 'Gagal Input Data Hand over'
+                        'message' => validation_errors(' ', '')
                     );
+                    $this->session->set_flashdata($array);
+                    $this->view_insert_hand_over();
                 }
-                
-                $this->session->set_flashdata($array);
-                redirect('asisten-manager-gudang/view-hand-over');
             }else
             {
                 redirect('Account');
@@ -1265,68 +1481,78 @@
                         'message' => 'Gagal Hapus Data'
                     );
                 }
+                
                 $this->session->set_flashdata($array);
-                redirect('asisten-manager-gudang/view-hand_over');
+                redirect('asisten-manager-gudang/view-hand-over');
             }else
             {
                 redirect('Account');
             }
         }
-                              
+        
         public function edit_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-            {        
+            {   
                 $config = array(
-                            array(
-                                'field' => 'edit_id_admin',
-                                'label' => ' Id Admin',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_id_supplier',
-                                'label' => ' Id Supplier',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_id_gudang_tujuan',
-                                'label' => ' Id Gudang Tujuan',
-                                'rules' => 'required'
-                            ),
-                            array(
-                                'field' => 'edit_kode_hand_over',
-                                'label' => ' Kode Pre Order',
-                                'rules' => 'required'
-                            )
-                    );
-                
+                    array(
+                        'field' => 'edit_id_gudang_asal',
+                        'label' => ' Id Gudang Asal',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'edit_id_gudang_tujuan',
+                        'label' => ' Id Gudang Tujuan',
+                        'rules' => 'required'
+                    ),
+                    array(
+                        'field' => 'edit_tanggal_dibuat',
+                        'label' => 'Tanggal dibuat',
+                        'rules' => 'required'
+                    )
+                );
+        
                 $this->form_validation->set_rules($config);
                 if($this->form_validation->run() == TRUE) 
                 {
-                    $array_model = array(
-                        'id_hand_over' => $this->input->post('edit_id_hand_over', TRUE),
-                        'id_admin' => $this->input->post('edit_id_admin', TRUE),
-                        'id_supplier' => $this->input->post('edit_id_supplier', TRUE),
-                        'id_gudang_tujuan' => $this->input->post('edit_id_gudang_tujuan', TRUE),
-                        'kode_hand_over' => $this->input->post('edit_kode_hand_over', TRUE)
-                    );
-                        $id_hand_over = $this->input->post('edit_id_hand_over', TRUE);
-                        if($this->Base_model->edit('hand_over', array("id_hand_over" => $id_hand_over), $array_model) == TRUE)
+
+                    $id_hand_over = $this->input->post('edit_id_hand_over', TRUE);
+                    $edit_hand_over = $this->hand_over->edit_hand_over($id_hand_over);
+    
+                    if($edit_hand_over !== false)
+                    {
+                        if($this->hand_over->edit_detail_hand_over($id_hand_over) == true)
                         {
                             $array = array(
                                 'status' => 'success',
-                                'message' => 'Berhasil Edit Data'
+                                'message' => 'Berhasil Edit Data Hand Over, <a href="'.base_url('asisten-manager-gudang/cetak-hand-over/').$id_hand_over.'" target="_blank"><u>Cetak surat sekarang</u></a>'
                             );
                         }else{
                             $array = array(
                                 'status' => 'failed',
-                                'message' => 'Gagal Edit Data'
+                                'message' => 'Gagal Edit Data Hand Over'
                             );
                         }
-                        $this->session->set_flashdata($array);
-                        redirect('asisten-manager-gudang/view-hand-over');
+                        
+                    }else
+                    {
+                        //insert table pre order gagal
+                        $array = array(
+                            'status' => 'failed',
+                            'message' => 'Gagal Edit Data Hand Over'
+                        );
+                    }
+
+                    $this->session->set_flashdata($array);
+                    redirect('asisten-manager-gudang/view-edit-hand-over/'.$id_hand_over);
                 }else{
-                    $this->view_hand_over();
+                    //Validasi gagal
+                    $array = array(
+                        'status' => 'failed',
+                        'message' => validation_errors(' ', '')
+                    );
+                    $this->session->set_flashdata($array);
+                    $this->view_edit_hand_over($this->input->post('edit_id_hand_over', TRUE));
                 }
                 
             }else
@@ -1334,7 +1560,7 @@
                 redirect('Account');
             }
         }
-                              
+
         public function get_specific_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -1346,7 +1572,30 @@
                 redirect('Account');
             }
         }
-                                                                       
+                   
+        public function terima_hand_over()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                if($this->hand_over->terima_hand_over($this->uri->segment(3))  == true)
+                {
+                    $array = array(
+                        'status' => 'success',
+                        'message' => 'Hand Over berhasil diterima'
+                    );
+                }else{
+                    $array = array(
+                        'status' => 'failed',
+                        'message' => 'Hand Over gagal diterima'
+                    );
+                }
+                $this->session->set_flashdata($array);
+                redirect('asisten-manager-gudang/view-hand-over');
+            }else
+            {
+                redirect('Account');
+            }
+        }                                                    
                             
 
 

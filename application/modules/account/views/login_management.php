@@ -22,7 +22,7 @@
   <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
     <div class="container">
       <div class="navbar-wrapper">
-        <a class="navbar-brand" href="#pablo">Login Page</a>
+        <a class="navbar-brand">Login Page</a>
       </div>
     </div>
   </nav>
@@ -35,7 +35,7 @@
             <form class="form" method="post" action="<?= base_url('Account/login_management')?>">
               <div class="card card-hidden card-login">
                 <div class="card-header card-header-rose text-center">
-                  <h4 class="card-title">Welcome !</h4>
+                  <h4 class="card-title">Welcome Leader !</h4>
                 </div>
                 <div class="card-body">
                   <?php

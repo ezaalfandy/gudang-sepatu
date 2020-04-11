@@ -135,7 +135,7 @@
         action="<?= base_url('asisten-manager-gudang/edit-supplier')?>" method="post" accept-charset="utf-8">
 
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">Edit Supplier</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>

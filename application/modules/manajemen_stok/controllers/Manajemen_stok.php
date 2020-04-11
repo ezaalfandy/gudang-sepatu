@@ -95,9 +95,12 @@ class Manajemen_stok extends MY_Controller {
             return false;
         }
     }
-
-
-
+    public function get_specific_stok_barang($where, $json = FALSE)
+    {
+        $result = $this->Manajemen_stok_model->get_specific_stok_barang($where);
+        
+        return ($json == true) ? json_encode($result) : $result;
+    }
 
 }
 
