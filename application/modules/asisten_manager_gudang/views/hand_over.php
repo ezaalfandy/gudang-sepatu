@@ -36,7 +36,7 @@
         </div>
         <div class="card-body">
           <div class="col-lg-3 offset-lg-9">
-            <a class="btn btn-primary btn-block my-4" href="<?= base_url('asisten-manager-gudang/view-insert-hand-over')?>" target="_blank">
+            <a class="btn btn-primary btn-block my-4" href="<?= base_url('asisten-manager-gudang/view-insert-hand-over')?>">
               <i class="material-icons">add</i>
               Tambah
             </a>
@@ -54,10 +54,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $n = 1;?>
                 <?php foreach($data_hand_over as $k_hand_over => $v_hand_over):?>
                   <?php if($v_hand_over->status_hand_over == 'diproses'):?>
                     <tr>
-                      <td></td>
+                      <td><?= $n?></td>
                       <td><?= $v_hand_over->kode_hand_over?></td>
                       <td><?= $v_hand_over->gudang_asal?></td>
                       <td><?= $v_hand_over->gudang_tujuan?></td>
@@ -65,12 +66,12 @@
                       <td>
                         <div class="row">
                           <div class="col-md-12 px-1">
-                            <button class="btn btn-success btn-sm btn-block" onclick="terimaHandOver(<?= $v_hand_over->id_hand_over?>)">
+                            <a class="btn btn-success btn-sm btn-block"href="<?= base_url('asisten-manager-gudang/view-terima-hand-over/').$v_hand_over->kode_hand_over?>">
                               Terima
-                            </button>
+                            </a>
                           </div>
                           <div class="col-md-6 px-1">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-hand-over/').$v_hand_over->id_hand_over?>">
+                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-hand-over/').$v_hand_over->kode_hand_over?>">
                               Edit
                             </a>
                           </div>
@@ -80,7 +81,7 @@
                             </button>
                           </div>
                           <div class="col-md-12 px-1">
-                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
+                            <a class="btn btn-primary btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->kode_hand_over?>">
                               <i class="material-icons">
                                 print
                               </i> Surat
@@ -120,10 +121,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $n = 1;?>
                 <?php foreach($data_hand_over as $k_hand_over => $v_hand_over):?>
                   <?php if($v_hand_over->status_hand_over == 'diterima'):?>
                     <tr>
-                      <td></td>
+                      <td><?= $n?></td>
                       <td><?= $v_hand_over->kode_hand_over?></td>
                       <td><?= $v_hand_over->gudang_asal?></td>
                       <td><?= $v_hand_over->gudang_tujuan?></td>
@@ -136,12 +138,12 @@
                             </button>
                           </div>
                           <div class="col-md-6 px-1">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-hand-over/').$v_hand_over->id_hand_over?>">
+                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-hand-over/').$v_hand_over->kode_hand_over?>">
                               Edit
                             </a>
                           </div>
                           <div class="col-md-12 px-1">
-                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->id_hand_over?>">
+                            <a class="btn btn-primary btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/cetak-hand-over/').$v_hand_over->kode_hand_over?>">
                               <i class="material-icons">
                                 print
                               </i> Surat
@@ -174,7 +176,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "15%", "targets": -1 }
+        { "width": "17%", "targets": -1 }
       ],
       responsive: false
     });

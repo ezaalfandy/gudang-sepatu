@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+        
             <?php
                 if($this->session->flashdata('status') === 'success'){
                 echo '
@@ -27,8 +28,8 @@
         </div>
         <div class="col-md-12 col-lg-12">
             <div class="card">
-                <form novalidate="novalidate" id="formEditPreOrder" action="<?= base_url('asisten-manager-gudang/edit-pre-order')?>" method="post" accept-charset="utf-8">
-                    <div class="card-header card-header-icon card-header-info">
+                <form novalidate="novalidate" id="formEditPreOrder" action="<?= base_url('asisten-manager-gudang/terima-pre-order')?>" method="post" accept-charset="utf-8">
+                    <div class="card-header card-header-icon card-header-success">
                         <div class="card-icon">
                             <i class="material-icons">edit_drive_file</i>
                         </div>
@@ -152,9 +153,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <input type="submit" value="Ubah" class="btn btn-info btn-block">
-                    </div>
+                    <?php if($data_pre_order->status_pre_order == 'diproses'):?>
+                        <div class="card-footer">
+                            <input type="submit" value="Terima Pre Order" class="btn btn-success btn-block">
+                        </div>
+                    <?php endif?>
                 </form>
             </div>
         </div>

@@ -1,23 +1,29 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <?php if($data_pre_order->status_pre_order !== 'diproses'):?>
-                <div class="alert alert-success">
+            <?php
+                if($this->session->flashdata('status') === 'success'){
+                echo '
+                    <div class="alert alert-success">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <i class="material-icons">close</i>
                     </button>
                     <span>
-                        <b> Pre order ini telah diterima - </b> anda dapat 
-                        <a href="<?= base_url('asisten-manager-gudang/cetak-nota-pre-order/').$this->uri->segment(3)?>">
-                            <u>mencetak nota pembayaran </u>
-                        </a>
-                        atau 
-                        <a href="<?= base_url('asisten-manager-gudang/view-pre-order')?>">
-                            <u>kembali ke halaman pre order</u>
-                        </a>
-                    </span>
-                </div>
-            <?php endif?>
+                        <b> Success - </b> '.$this->session->userdata('message').'</span>
+                    </div>
+                ';
+                }elseif ($this->session->flashdata('status') === 'failed') {
+                echo '
+                    <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <i class="material-icons">close</i>
+                    </button>
+                    <span>
+                        <b> Danger - </b> '.$this->session->userdata('message').'</span>
+                    </div>
+                ';
+                }
+            ?>
         </div>
         <div class="col-md-12 col-lg-12">
             <div class="card">
@@ -63,14 +69,6 @@
                                 class="form-control" required="true" disabled/>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="view_pre_order_total_harga">Total Harga</label>
-                                <input type="text" name="view_total_harga"
-                                value="<?= $data_pre_order->total_harga?>" id="view_pre_order_total_harga"
-                                class="form-control" disabled/>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row justify-content-center rincian_barang_container">
@@ -81,7 +79,7 @@
                         <?php for ($i=0; $i < count($data_detail_pre_order) ; $i++):?>
                             <div class="col-md-12 input_barang mb-4 py-3 border border-dark">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Nama Barang</label>
                                             <input type="hidden" name="view_id_barang[<?= $i?>]">
@@ -89,7 +87,7 @@
                                             class="form-control" required="true"  value="<?= $data_detail_pre_order[$i]->kode_barang.' - '.$data_detail_pre_order[$i]->merek.' '.$data_detail_pre_order[$i]->tipe.' '.$data_detail_pre_order[$i]->warna.' Ukuran '.$data_detail_pre_order[$i]->ukuran?>" disabled/>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Jumlah</label>
                                             <input type="number" name="view_jumlah_barang[<?= $i?>]"
@@ -97,7 +95,7 @@
                                             class="form-control" required="true" min="0" disabled/>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <select name="view_satuan[<?= $i?>]" class="selectpicker form-control" data-size="3" data-style="btn btn-light btn-sm" title="Single Select" disabled>
                                                 <option value="kodi" <?php echo ($data_detail_pre_order[$i]->satuan == 'kodi') ?  'selected' : ''?>>Kodi</option>
@@ -106,20 +104,35 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Harga per satuan</label>
-                                            <input type="number" min="0" name="view_harga_per_satuan[<?= $i?>]"
-                                            value="<?= $data_detail_pre_order[$i]->harga_per_satuan ?>"
-                                            class="form-control" disabled/>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         <?php endfor;?>
                     </div>
+                    <?php if($data_pre_order->status_pre_order == 'diproses'):?>
+                        <div class="card-footer">
+                            <input type="button" onclick="terimaPreOrder(<?= $data_pre_order->id_pre_order?>)" value="Terima Pre Order" class="btn btn-success btn-block">
+                        </div>
+                    <?php endif?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+  function terimaPreOrder($id_pre_order) {
+    swal({
+      title: 'Apakah Anda Yakin ?',
+      text: "Data Pre Order akan diterima, pastikan sudah melakukan pengecakan terlebih dahulu !",
+      type: 'info',
+      showCancelButton: true,
+      confirmButtonClass: 'btn btn-info',
+      cancelButtonClass: 'btn btn-default btn-link',
+      confirmButtonText: 'Ya, Terima',
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.value === true) {
+        window.location.href = "<?= base_url('admin-gudang/terima-pre-order/')?>" + $id_pre_order;
+      }
+    })
+  }
+</script>

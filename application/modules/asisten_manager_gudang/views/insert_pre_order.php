@@ -53,7 +53,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="data_pre_order">
-                            <div class="row justify-content-center px-5">
+                            <div class="row justify-content-center">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="autocomplete_insert_pre_order_id_supplier"> Supplier</label>
@@ -79,18 +79,18 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="insert_pre_order_tanggal_dibuat">Tanggal Terbit</label>
-                                        <input type="date" name="insert_tanggal_dibuat"
-                                        value="<?php echo set_value('insert_tanggal_dibuat'); ?>" id="insert_pre_order_tanggal_dibuat"
-                                        class="form-control" required="true"/>
+                                        <input type="text" name="insert_tanggal_dibuat"
+                                        value="<?php echo set_value('insert_tanggal_dibuat', Date("d-m-Y")); ?>" id="insert_pre_order_tanggal_dibuat"
+                                        class="form-control datepicker" required="true"/>
                                         <small class="text-danger"><?php echo form_error('insert_tanggal_dibuat'); ?></small>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="insert_pre_order_tanggal_setor">Tanggal Setor</label>
-                                        <input type="date" name="insert_tanggal_setor"
-                                        value="<?php echo set_value('insert_tanggal_setor'); ?>" id="insert_pre_order_tanggal_setor"
-                                        class="form-control" required="true"/>
+                                        <input type="text" name="insert_tanggal_setor"
+                                        value="<?php echo set_value('insert_tanggal_setor', Date("d-m-Y", strtotime("+1 week"))); ?>" id="insert_pre_order_tanggal_setor"
+                                        class="form-control datepicker" required="true"/>
                                         <small class="text-danger"><?php echo form_error('insert_tanggal_setor'); ?></small>
                                     </div>
                                 </div>
@@ -132,13 +132,13 @@
                                             <div class="form-group">
                                                 <label>Harga per satuan</label>
                                                 <input type="number" min="0" name="insert_harga_per_satuan[0]"
-                                                value=""
+                                                value="0"
                                                 class="form-control" />
                                                 <small class="text-danger"><?php echo form_error('insert_harga_per_satuan'); ?></small>
                                             </div>
                                         </div>
                                         <div class="col-md-2 d-flex justify-content-center align-items-center p-0">
-                                            <button type="button" class="btn btn-danger btn-sm remove_rincian_barang">
+                                            <button type="button" class="btn btn-danger btn-sm  mt-3  remove_rincian_barang">
                                                 <span class="material-icons">
                                                 remove_circle
                                                 </span> Hapus
@@ -210,7 +210,7 @@
 
     $cloned_element.find('[name="autocomplete_insert_id_barang[0]"]').attr("name", "autocomplete_insert_id_barang["+$element_index+"]").val(null);
     $cloned_element.find('[name="insert_jumlah_barang[0]"]').attr("name", "insert_jumlah_barang["+$element_index+"]").val(null);
-    $cloned_element.find('[name="insert_harga_per_satuan[0]"]').attr("name", "insert_harga_per_satuan["+$element_index+"]").val(null);
+    $cloned_element.find('[name="insert_harga_per_satuan[0]"]').attr("name", "insert_harga_per_satuan["+$element_index+"]")
     $cloned_element.find('[name="insert_satuan[0]"]').attr("name", "insert_satuan["+$element_index+"]");
 
     $cloned_element.find('.bootstrap-select').replaceWith(function() { return $('select', this); });
@@ -229,6 +229,7 @@
   
   $(document).ready(function () {
     md.initMaterialWizard('#wizardPreOrder', $('#formInsertPreOrder').validate());
+    md.initFormExtendedDatetimepickers();
 
     $('#wizardPreOrder').on('click', '.remove_rincian_barang', function(){
       if($('.input_barang').length > 1){

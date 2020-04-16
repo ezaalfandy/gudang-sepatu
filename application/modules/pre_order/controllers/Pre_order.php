@@ -28,7 +28,7 @@ class Pre_order extends MY_Controller {
             }
         }
     }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
     public function get_all_pre_order(){
         return $this->Pre_order_model->get_all_pre_order();
     }
@@ -52,30 +52,34 @@ class Pre_order extends MY_Controller {
         $id_supplier = $this->input->post('insert_id_supplier', TRUE);
         $id_gudang = $this->input->post('insert_id_gudang_tujuan', TRUE);
 
-        $kode_supplier = $this->Base_model->get_specific('supplier', array('id_supplier' => $id_supplier))->kode_supplier;
-        $kode_gudang = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang))->kode_gudang;
-        $id_pre_order = sprintf('%05d', $this->Base_model->get_last_primary_key('pre_order', 'id_pre_order'));
-
         $array_model = array(
             'id_admin' => $this->session->userdata('id_admin'),
             'id_supplier' => $id_supplier,
             'id_gudang_tujuan' => $this->input->post('insert_id_gudang_tujuan', TRUE),
-            'kode_pre_order' => $kode_supplier.$id_pre_order.$kode_gudang,
-            'tanggal_dibuat' => $this->input->post('insert_tanggal_dibuat', TRUE),
-            'tanggal_setor' => $this->input->post('insert_tanggal_setor', TRUE),
+            'kode_pre_order' => ' ',
+            'tanggal_dibuat' => Date('Y-m-d', strtotime($this->input->post('insert_tanggal_dibuat', TRUE))),
+            'tanggal_setor' =>  Date('Y-m-d', strtotime($this->input->post('insert_tanggal_setor', TRUE))),
             'status_pre_order' => 'diproses'
         );
 
         $id_pre_order = $this->Base_model->insert('pre_order', $array_model);
 
-        if($id_pre_order === false)
+        if($id_pre_order !== FALSE)
         {
-            return false;
+            //UPDATE kode_pre_order setelah insert
+            $kode_supplier = $this->Base_model->get_specific('supplier', array('id_supplier' => $id_supplier))->kode_supplier;
+            $kode_gudang = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang))->kode_gudang;
+            $kode_pre_order = $kode_supplier.sprintf('%05d', $id_pre_order).$kode_gudang;
+
+            if($this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), array('kode_pre_order' => $kode_pre_order)) === FALSE)
+            {
+                return FALSE;
+            }
         }else{
-            return $id_pre_order;
+            return FALSE;
         }                
 
-        return true;
+        return $id_pre_order;
     }
 
     public function insert_detail_pre_order($id_pre_order){
@@ -106,13 +110,9 @@ class Pre_order extends MY_Controller {
 
         //MENGINPUT TOTAL HARGA
         $total_harga = $this->hitung_total_harga($id_pre_order);
-        if($this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), array('total_harga' => $total_harga)) == true)
-        {
-            return true;
-        }else
-        {
-            return false;
-        }
+        $this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), array('total_harga' => $total_harga));
+        return true;
+       
 
     }
     
@@ -131,8 +131,7 @@ class Pre_order extends MY_Controller {
             'id_gudang_tujuan' => $this->input->post('edit_id_gudang_tujuan', TRUE),
             'kode_pre_order' => $kode_supplier.$kode_pre_order.$kode_gudang,
             'tanggal_dibuat' => $this->input->post('edit_tanggal_dibuat', TRUE),
-            'tanggal_setor' => $this->input->post('edit_tanggal_setor', TRUE),
-            'status_pre_order' => 'diproses'
+            'tanggal_setor' => $this->input->post('edit_tanggal_setor', TRUE)
         );
 
         $edit_pre_order = $this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), $array_model);
@@ -196,17 +195,18 @@ class Pre_order extends MY_Controller {
 
     public function delete_pre_order($id_pre_order){
         $all_barang = $this->Base_model->get_all_specific('detail_pre_order', array("id_pre_order" => $id_pre_order) );
-        $id_gudang = $this->Base_model->get_specific('pre_order', array('id_pre_order' => $id_pre_order))->id_gudang_tujuan;
+        $data_pre_order = $this->Base_model->get_specific('pre_order', array('id_pre_order' => $id_pre_order));
 
-        if($this->pre_order_ditolak($all_barang, $id_gudang) == true)
-        {
-            if($this->Base_model->delete('pre_order', array("id_pre_order" => $id_pre_order)) == true)
-            {
-                return true;
-            }else
+        if($data_pre_order->status_pre_order == 'diterima'){
+            if($this->pre_order_ditolak($all_barang, $data_pre_order->id_gudang_tujuan) === false)
             {
                 return false;
             }
+        }
+        
+        if($this->Base_model->delete('pre_order', array("id_pre_order" => $id_pre_order)) == true)
+        {
+            return true;
         }else
         {
             return false;

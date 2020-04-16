@@ -69,14 +69,6 @@
                                 class="form-control" required="true" disabled/>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="view_pre_order_total_harga">Total Harga</label>
-                                <input type="text" name="view_total_harga"
-                                value="<?= $data_pre_order->total_harga?>" id="view_pre_order_total_harga"
-                                class="form-control" disabled/>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row justify-content-center rincian_barang_container">
@@ -87,7 +79,7 @@
                         <?php for ($i=0; $i < count($data_detail_pre_order) ; $i++):?>
                             <div class="col-md-12 input_barang mb-4 py-3 border border-dark">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Nama Barang</label>
                                             <input type="hidden" name="view_id_barang[<?= $i?>]">
@@ -95,7 +87,7 @@
                                             class="form-control" required="true"  value="<?= $data_detail_pre_order[$i]->kode_barang.' - '.$data_detail_pre_order[$i]->merek.' '.$data_detail_pre_order[$i]->tipe.' '.$data_detail_pre_order[$i]->warna.' Ukuran '.$data_detail_pre_order[$i]->ukuran?>" disabled/>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Jumlah</label>
                                             <input type="number" name="view_jumlah_barang[<?= $i?>]"
@@ -103,21 +95,13 @@
                                             class="form-control" required="true" min="0" disabled/>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <select name="view_satuan[<?= $i?>]" class="selectpicker form-control" data-size="3" data-style="btn btn-light btn-sm" title="Single Select" disabled>
                                                 <option value="kodi" <?php echo ($data_detail_pre_order[$i]->satuan == 'kodi') ?  'selected' : ''?>>Kodi</option>
                                                 <option value="lusin" <?php echo ($data_detail_pre_order[$i]->satuan == 'lusin') ? 'selected' : ''?>>Lusin</option>
                                                 <option value="pasang" <?php echo ($data_detail_pre_order[$i]->satuan == 'pasang') ? 'selected' : ''?>>Pasang</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Harga per satuan</label>
-                                            <input type="number" min="0" name="view_harga_per_satuan[<?= $i?>]"
-                                            value="<?= $data_detail_pre_order[$i]->harga_per_satuan ?>"
-                                            class="form-control" disabled/>
                                         </div>
                                     </div>
                                 </div>

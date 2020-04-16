@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-12 col-lg-12">
             <div class="card">
-                <form novalidate="novalidate" id="formEditHandOver" action="<?= base_url('asisten-manager-gudang/edit-hand-over')?>" method="post" accept-charset="utf-8">
+                <form novalidate="novalidate" id="formEditHandOver" action="<?= base_url('asisten-manager-gudang/terima-hand-over')?>" method="post" accept-charset="utf-8">
                     <div class="card-header card-header-icon card-header-info">
                         <div class="card-icon">
                             <i class="material-icons">edit_drive_file</i>
@@ -125,9 +125,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <input type="submit" value="Terima Pre Order" class="btn btn-success btn-block">
-                    </div>
+                    <?php if($data_hand_over->status_hand_over == 'diproses'):?>
+                        <div class="card-footer">
+                            <input type="submit" value="Terima Hand Over" class="btn btn-success btn-block">
+                        </div>
+                    <?php endif?>
                 </form>
             </div>
         </div>

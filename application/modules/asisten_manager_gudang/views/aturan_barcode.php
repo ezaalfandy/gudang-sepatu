@@ -84,7 +84,7 @@
                   <td><?= $v_merek->nama_merek?></td>
                   <td><?= $v_merek->kode_merek?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteMerek(<?= $v_merek->id_merek?>)">
+                    <button class="btn btn-danger btn-sm btn-block" onclick="deleteMerek(<?= $v_merek->id_merek?>)">
                       <i class="material-icons">
                         delete
                       </i>
@@ -166,7 +166,7 @@
                   <td><?= $v_warna->nama_warna?></td>
                   <td><?= $v_warna->kode_warna?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteWarna(<?= $v_warna->id_warna?>)">
+                    <button class="btn btn-danger btn-sm btn-block" onclick="deleteWarna(<?= $v_warna->id_warna?>)">
                       <i class="material-icons">
                         delete
                       </i>

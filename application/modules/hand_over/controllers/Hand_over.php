@@ -45,6 +45,10 @@ class Hand_over extends MY_Controller {
         return $this->Hand_over_model->get_specific_hand_over($where);
     }
 
+    public function get_all_specific_hand_over($where){
+        return $this->Hand_over_model->get_all_specific_hand_over($where);
+    }
+
     public function get_all_specific_detail_hand_over($where){
         return $this->Hand_over_model->get_all_specific_detail_hand_over($where);
     }
@@ -55,28 +59,34 @@ class Hand_over extends MY_Controller {
     {
         $id_gudang_asal = $this->input->post('insert_id_gudang_asal', TRUE);
         $id_gudang_tujuan = $this->input->post('insert_id_gudang_tujuan', TRUE);
-        $id_gudang_asal = $this->input->post('insert_id_gudang_asal', TRUE);
         
-        $kode_gudang_asal = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_asal))->kode_gudang;
-        $kode_gudang_tujuan = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_tujuan))->kode_gudang;
-        $kode_hand_over = sprintf('%05d', $this->Base_model->get_last_primary_key('hand_over', 'id_hand_over'));
         
         $array_model = array(
             'id_admin' => $this->session->userdata('id_admin'),
             'id_gudang_asal' => $id_gudang_asal,
             'id_gudang_tujuan' => $id_gudang_tujuan,
-            'kode_hand_over' => $kode_gudang_asal.$kode_hand_over.$kode_gudang_tujuan,
-            'tanggal_dibuat' => $this->input->post('insert_tanggal_dibuat', TRUE),
+            'kode_hand_over' => ' ',
+            'tanggal_dibuat' => Date('Y-m-d', strtotime($this->input->post('insert_tanggal_dibuat', TRUE))),
             'status_hand_over' => 'diproses'
         );
 
         $id_hand_over = $this->Base_model->insert('hand_over', $array_model);
-        if($id_hand_over === false)
+        if($id_hand_over !== false)
         {
-            return false;
+            //UPDATE kode_hand_over setelah insert
+            
+            $kode_gudang_asal = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_asal))->kode_gudang;
+            $kode_gudang_tujuan = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_tujuan))->kode_gudang;
+            $kode_hand_over = $kode_gudang_asal.sprintf('%05d', $id_hand_over).$kode_gudang_tujuan;
+
+            if($this->Base_model->edit('hand_over', array('id_hand_over' => $id_hand_over), array('kode_hand_over' => $kode_hand_over)) === FALSE)
+            {
+                return FALSE;
+            }
         }else{
-            return $id_hand_over;
+            return FALSE;
         }
+        return $id_hand_over;
     }
     
     public function terima_hand_over($id_hand_over){
@@ -194,15 +204,17 @@ class Hand_over extends MY_Controller {
         $all_barang = $this->Base_model->get_all_specific('detail_hand_over', array("id_hand_over" => $id_hand_over) );
         $hand_over = $this->Base_model->get_specific('hand_over', array("id_hand_over" => $id_hand_over) );
         
-        if($this->hand_over_ditolak($all_barang, $hand_over->id_gudang_asal, $hand_over->id_gudang_tujuan) == true)
+        if($hand_over->status_hand_over == 'diterima')
         {
-            if($this->Base_model->delete('hand_over', array("id_hand_over" => $id_hand_over)) == true)
-            {
-                return true;
-            }else
+            if($this->hand_over_ditolak($all_barang, $hand_over->id_gudang_asal, $hand_over->id_gudang_tujuan) === FALSE)
             {
                 return false;
             }
+        }
+
+        if($this->Base_model->delete('hand_over', array("id_hand_over" => $id_hand_over)) == true)
+        {
+            return true;
         }else
         {
             return false;

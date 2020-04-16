@@ -77,7 +77,7 @@
                                 <td><?= $n++; ?></td>
                                 <td><?= $v_detail_pre_order->merek.' '.$v_detail_pre_order->tipe.' '.$v_detail_pre_order->warna.' '.$v_detail_pre_order->ukuran ?></td>
                                 <td><?= $v_detail_pre_order->jumlah.' '.$v_detail_pre_order->satuan ?></td>
-                                <td class="text-right">Rp <?= number_format($v_detail_pre_order->harga_per_satuan, 0, ".", ".")?></td>
+                                <td class="text-right">Rp <?= number_format($v_detail_pre_order->harga_per_satuan, 0, ".", ".").' / '.$v_detail_pre_order->satuan?></td>
                             </tr>
                         <?php endforeach;?>
 

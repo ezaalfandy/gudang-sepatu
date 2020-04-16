@@ -133,7 +133,7 @@
                   <td>
                     <div class="row">
                       <div class="col-md-6 px-1">
-                        <button class="btn btn-danger btn-sm" onclick="deleteBarang(<?= $v_barang->id_barang?>)">
+                        <button class="btn btn-danger btn-sm btn-block" onclick="deleteBarang(<?= $v_barang->id_barang?>)">
                           <i class="material-icons">
                             delete
                           </i>

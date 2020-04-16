@@ -35,7 +35,7 @@
         </div>
         <div class="card-body">
           <div class="col-lg-3 offset-lg-9">
-            <a class="btn btn-primary btn-block my-4" target="_blank" href="<?= base_url('asisten-manager-gudang/view-insert-pre-order')?>">
+            <a class="btn btn-primary btn-block my-4" href="<?= base_url('asisten-manager-gudang/view-insert-pre-order')?>">
               <i class="material-icons">add</i>
               Tambah
             </a>
@@ -54,11 +54,12 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $n = 1;?>
                 <?php foreach($data_pre_order as $k_pre_order => $v_pre_order):?>
                   <?php if($v_pre_order->status_pre_order == 'diproses'):?>
 
                     <tr>
-                      <td></td>
+                      <td><?= $n++?></td>
                       <td><?= $v_pre_order->kode_pre_order?></td>
                       <td><?= $v_pre_order->kode_supplier.' - '.$v_pre_order->nama_supplier.' ('.$v_pre_order->telepon_supplier.')'?></td>
                       <td><?= $v_pre_order->kode_gudang.' <br> '.$v_pre_order->alamat.', '.$v_pre_order->kabupaten_kota.' <br> '.$v_pre_order->provinsi.' ('.$v_pre_order->kode_pos.')'?></td>
@@ -66,12 +67,12 @@
                       <td>
                         <div class="row">
                           <div class="col-md-12">
-                            <button class="btn btn-success btn-sm btn-block" onclick="terimaPreOrder(<?= $v_pre_order->id_pre_order?>)">
+                            <a class="btn btn-success btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-terima-pre-order/').$v_pre_order->kode_pre_order?>">
                               Terima
-                            </button>
+                            </a>
                           </div>
                           <div class="col-md-12">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-pre-order/').$v_pre_order->id_pre_order?>" target="_blank">
+                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-pre-order/').$v_pre_order->kode_pre_order?>">
                               Edit
                             </a>
                           </div>
@@ -134,10 +135,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $n = 1;?>
                 <?php foreach($data_pre_order as $k_pre_order => $v_pre_order):?>
                   <?php if($v_pre_order->status_pre_order == 'diterima'):?>
                     <tr>
-                      <td></td>
+                      <td><?= $n++?></td>
                       <td><?= $v_pre_order->kode_pre_order?></td>
                       <td><?= $v_pre_order->kode_supplier.' - '.$v_pre_order->nama_supplier.' ('.$v_pre_order->telepon_supplier.')'?></td>
                       <td><?= $v_pre_order->kode_gudang.' <br> '.$v_pre_order->alamat.', '.$v_pre_order->kabupaten_kota.' <br> '.$v_pre_order->provinsi.' ('.$v_pre_order->kode_pos.')'?></td>
@@ -145,7 +147,7 @@
                       <td>
                         <div class="row">
                           <div class="col-md-12">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-pre-order/').$v_pre_order->id_pre_order?>">
+                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-pre-order/').$v_pre_order->kode_pre_order?>">
                               Edit
                             </a>
                           </div>
@@ -238,12 +240,6 @@
     md.setInputAutoComplete('#autocomplete_insert_pre_order_id_gudang_tujuan', $gudang);
     md.setInputAutoComplete('#autocomplete_insert_pre_order_id_supplier', $supplier);
     md.setInputAutoComplete('[name="autocomplete_insert_id_barang[0]"]', $barang);
-
-    table_pre_order.on('order.dt search.dt', function () {
-      table_pre_order.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1;
-      });
-    }).draw();
 
     $('#formInsertPreOrder').validate();
     $('#formEditPreOrder').validate();

@@ -135,7 +135,6 @@ $(document).ready(function() {
       var $card = $(this).parent('.card');
 
       $card.find('.fix-broken-card').click(function() {
-        console.log(this);
         var $header = $(this).parent().parent().siblings('.card-header, .card-header-image');
 
         $header.removeClass('hinge').addClass('fadeInDown');
@@ -318,7 +317,7 @@ md = {
     });
 
     $('.datepicker').datetimepicker({
-      format: 'MM/DD/YYYY',
+      format: 'DD-MM-YYYY',
       icons: {
         time: "fa fa-clock-o",
         date: "fa fa-calendar",
@@ -330,7 +329,7 @@ md = {
         clear: 'fa fa-trash',
         close: 'fa fa-remove'
       }
-    });
+    })
 
     $('.timepicker').datetimepicker({
       //          format: 'H:mm',    // use this format if you want the 24hours timepicker
@@ -444,6 +443,8 @@ md = {
         if (!$valid) {
           $validator.focusInvalid();
           return false;
+        }else{
+
         }
       },
 
@@ -452,6 +453,11 @@ md = {
         var $total = navigation.find('li').length;
         var $wizard = navigation.closest($element);
 
+        // always focus for first element
+        setTimeout(function() {
+          $wizard.find('.tab-pane.active input:not([type="hidden"]:not([type="button"]))').first().focus();
+        }, 150);
+        
         $first_li = navigation.find('li:first-child a').html();
         $moving_div = $('<div class="moving-tab">' + $first_li + '</div>');
         $($element+' .wizard-navigation').append($moving_div);
@@ -476,7 +482,10 @@ md = {
         var $current = index + 1;
 
         var $wizard = navigation.closest($element);
-
+        // always focus for first element
+        setTimeout(function() {
+          $wizard.find('.tab-pane.active input:not([type="hidden"]:not([type="button"]))').first().focus();
+        }, 150);
         // If it's the last tab then hide the last button and show the finish instead
         if ($current >= $total) {
           $($wizard).find('.btn-next').hide();

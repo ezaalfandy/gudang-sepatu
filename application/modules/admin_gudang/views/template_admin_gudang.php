@@ -40,7 +40,7 @@
   <script src="<?= base_url('assets/')?>js/plugins/bootstrap-selectpicker.js"></script>
 </head>
 
-<body class="">
+<body class="<?= ($this->uri->segment(2) == 'view-insert-penjualan')? 'sidebar-mini' : ' '?>">
   <div class="wrapper ">
     <div class="sidebar" data-color="white" data-background-color="red" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
       <div class="logo">
@@ -106,31 +106,49 @@
               <p> Pre Order</p>
             </a>
           </li>
-          <li class="nav-item <?php if($this->uri->segment(2) == 'view-hand-over'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('admin-gudang/view-hand-over')?>">
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-hand-over-masuk' || $this->uri->segment(2) == 'view-hand-over-keluar'){echo 'active';}?>">
+            <a class="nav-link" data-toggle="collapse" href="#handOver">
               <i class="material-icons">compare_arrows</i>
-              <p>Hand Over</p>
+              <p>Hand Over
+                <b class="caret"></b>
+              </p>
             </a>
+            <div class="collapse" id="handOver">
+              <ul class="nav">
+                <li class="nav-item <?= ($this->uri->segment(2) == 'view-hand-over-masuk') ? 'active': '';?>">
+                  <a class="nav-link" href="<?= base_url('admin-gudang/view-hand-over-masuk')?>">
+                    <span class="sidebar-mini"> HM </span>
+                    <span class="sidebar-normal"> Hand Over Masuk </span>
+                  </a>
+                </li>
+                <li class="nav-item <?= ($this->uri->segment(2) == 'view-hand-over-keluar') ? 'active': '';?>">
+                  <a class="nav-link" href="<?= base_url('admin-gudang/view-hand-over-keluar')?>">
+                    <span class="sidebar-mini"> HK </span>
+                    <span class="sidebar-normal"> Hand Over Keluar</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
+            <a class="nav-link" data-toggle="collapse" href="#penjualan">
               <i class="material-icons">shopping_cart</i>
               <p> Penjualan
                 <b class="caret"></b>
               </p>
             </a>
-            <div class="collapse" id="pagesExamples">
+            <div class="collapse" id="penjualan">
               <ul class="nav">
                 <li class="nav-item ">
-                  <a class="nav-link" href="../examples/pages/pricing.html">
-                    <span class="sidebar-mini"> P </span>
-                    <span class="sidebar-normal"> Pricing </span>
+                  <a class="nav-link" href="<?= base_url('admin-gudang/view-data-penjualan')?>">
+                    <span class="sidebar-mini"> DP </span>
+                    <span class="sidebar-normal"> Data Penjualan </span>
                   </a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link" href="../examples/pages/rtl.html">
-                    <span class="sidebar-mini"> RS </span>
-                    <span class="sidebar-normal"> RTL Support </span>
+                  <a class="nav-link" href="<?= base_url('admin-gudang/view-insert-penjualan')?>">
+                    <span class="sidebar-mini"> IP </span>
+                    <span class="sidebar-normal"> Input Penjualan </span>
                   </a>
                 </li>
               </ul>

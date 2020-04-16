@@ -43,7 +43,6 @@
                   <td>Supplier</td>
                   <td>Tanggal Terbit</td>
                   <td>Aksi</td>
-                  <td>Print</td>
                 </tr>
               </thead>
               <tbody>
@@ -59,35 +58,10 @@
                         <td>
                             <div class="row">
                                 <div class="col-md-12">
-                                  <button class="btn btn-success btn-sm btn-block" onclick="terimaPreOrder(<?= $v_pre_order->id_pre_order?>)">
-                                    Terima
-                                  </button>
-                                </div>
-                                <div class="col-md-12">
-                                    <a class="btn btn-info btn-sm btn-block" href="<?= base_url('admin-gudang/view-detail-pre-order/').$v_pre_order->kode_pre_order?>">
-                                        <i class="material-icons">
-                                            search
-                                        </i> Lihat
+                                    <a class="btn btn-success btn-sm btn-block" href="<?= base_url('admin-gudang/view-terima-pre-order/').$v_pre_order->kode_pre_order?>">
+                                        Terima
                                     </a>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row">
-                              <div class="col-md-12">
-                                  <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-pre-order/').$v_pre_order->id_pre_order?>">
-                                      <i class="material-icons">
-                                          print
-                                      </i> Surat
-                                  </a>
-                              </div>
-                              <div class="col-md-12">
-                                  <a class="btn btn-warning btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-barcode-pre-order/').$v_pre_order->id_pre_order?>">
-                                      <i class="material-icons">
-                                          print
-                                      </i> Barcode
-                                  </a>
-                              </div>
                             </div>
                         </td>
                     </tr>
@@ -119,7 +93,6 @@
                   <td>Supplier</td>
                   <td>Tanggal Terbit</td>
                   <td>Aksi</td>
-                  <td>Print</td>
                 </tr>
               </thead>
               <tbody>
@@ -138,24 +111,6 @@
                               <i class="material-icons">
                                 search
                               </i> Lihat
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <a class="btn btn-primary btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-pre-order/').$v_pre_order->id_pre_order?>">
-                              <i class="material-icons">
-                                print
-                              </i> Surat
-                            </a>
-                          </div>
-                          <div class="col-md-12">
-                            <a class="btn btn-warning btn-sm btn-block" target="_blank" href="<?= base_url('admin-gudang/cetak-barcode-pre-order/').$v_pre_order->id_pre_order?>">
-                              <i class="material-icons">
-                                print
-                              </i> Barcode
                             </a>
                           </div>
                         </div>
@@ -185,8 +140,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 },
-        { "width": "10%", "targets": -2 }
+        { "width": "10%", "targets": -1 }
       ],
       responsive: false
     });

@@ -104,7 +104,7 @@
                   <td><?= $v_supplier->alamat_supplier?></td>
                   <td><?= $v_supplier->telepon_supplier?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteSupplier(<?= $v_supplier->id_supplier?>)">
+                    <button class="btn btn-danger btn-sm btn-block" onclick="deleteSupplier(<?= $v_supplier->id_supplier?>)">
                       <i class="material-icons">
                         delete
                       </i>

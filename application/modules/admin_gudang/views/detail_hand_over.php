@@ -1,134 +1,85 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <?php
-                if($this->session->flashdata('status') === 'success'){
-                echo '
-                    <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Success - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
-                }elseif ($this->session->flashdata('status') === 'failed') {
-                echo '
-                    <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Danger - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
-                }
-            ?>
-        </div>
         <div class="col-md-12 col-lg-12">
             <div class="card">
-                <form novalidate="novalidate" id="formEditHandOver" action="<?= base_url('asisten-manager-gudang/edit-hand-over')?>" method="post" accept-charset="utf-8">
-                    <div class="card-header card-header-icon card-header-info">
-                        <div class="card-icon">
-                            <i class="material-icons">edit_drive_file</i>
-                        </div>
-                        <h4 class="card-title ">#<?= $data_hand_over->kode_hand_over?></h4>
+                <div class="card-header card-header-icon card-header-info">
+                    <div class="card-icon">
+                        <i class="material-icons">edit_drive_file</i>
                     </div>
-                    <div class="card-body px-5">
-                        <div class="row mt-4">
-                            
-                            <input type="hidden" name="edit_id_hand_over" value="<?= $data_hand_over->id_hand_over?>">
-
-                            <div class="col-md-12">
-                                <div class="form-group is-filled">
-                                    <label for="autocomplete_edit_hand_over_id_gudang_asal"> Gudang asal</label>
-                                    <input type="hidden" name="edit_id_gudang_asal" value="<?= $data_hand_over->id_gudang_asal?>">
-                                    <input type="text" name="autocomplete_edit_id_gudang_asal"
-                                    value="<?php echo set_value('edit_id_gudang_asal'); ?>" id="autocomplete_edit_hand_over_id_gudang_asal"
-                                    class="form-control" required="true"/>
-                                    <small class="text-danger"><?php echo form_error('edit_id_gudang_asal'); ?></small>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group is-filled">
-                                    <label for="autocomplete_edit_hand_over_id_gudang_tujuan" > Gudang Tujuan</label>
-                                    <input type="hidden" name="edit_id_gudang_tujuan">
-
-                                    <input type="text" name="autocomplete_edit_id_gudang_tujuan"
-                                    value="<?php echo set_value('edit_id_gudang_tujuan'); ?>" id="autocomplete_edit_hand_over_id_gudang_tujuan"
-                                    class="form-control" required="true" notEqualTo="#autocomplete_edit_hand_over_id_gudang_asal"/>
-                                    <small class="text-danger"><?php echo form_error('edit_id_gudang_tujuan'); ?></small>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="edit_hand_over_tanggal_dibuat">Tanggal Terbit</label>
-                                    <input type="date" name="edit_tanggal_dibuat"
-                                    value="<?php echo set_value('edit_tanggal_dibuat'); ?>" id="edit_hand_over_tanggal_dibuat"
-                                    class="form-control" required="true"/>
-                                    <small class="text-danger"><?php echo form_error('edit_tanggal_dibuat'); ?></small>
-                                </div>
+                    <h4 class="card-title ">#<?= $data_hand_over->kode_hand_over?></h4>
+                </div>
+                <div class="card-body px-5">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="form-group is-filled">
+                                <label for="autocomplete_edit_hand_over_id_gudang_asal"> Gudang asal</label>
+                                <input type="hidden" name="edit_id_gudang_asal" value="<?= $data_hand_over->id_gudang_asal?>">
+                                <input type="text" name="autocomplete_edit_id_gudang_asal"
+                                value="<?php echo set_value('edit_id_gudang_asal'); ?>" id="autocomplete_edit_hand_over_id_gudang_asal"
+                                class="form-control" required="true" readonly/>
+                                <small class="text-danger"><?php echo form_error('edit_id_gudang_asal'); ?></small>
                             </div>
                         </div>
-
-                        <div class="row justify-content-center rincian_barang_container">
-                            <div class="col-md-12 mt-5">
-                                <h5 class="text-center">Rincian Barang</h5>
+                        <div class="col-md-12">
+                            <div class="form-group is-filled">
+                                <label for="autocomplete_edit_hand_over_id_gudang_tujuan" > Gudang Tujuan</label>
+                                <input type="text" name="autocomplete_edit_id_gudang_tujuan"
+                                value="<?php echo set_value('edit_id_gudang_tujuan'); ?>" id="autocomplete_edit_hand_over_id_gudang_tujuan"
+                                class="form-control" required="true" notEqualTo="#autocomplete_edit_hand_over_id_gudang_asal" readonly/>
+                                <small class="text-danger"><?php echo form_error('edit_id_gudang_tujuan'); ?></small>
                             </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edit_hand_over_tanggal_dibuat">Tanggal Terbit</label>
+                                <input type="date" name="edit_tanggal_dibuat"
+                                value="<?php echo set_value('edit_tanggal_dibuat'); ?>" id="edit_hand_over_tanggal_dibuat"
+                                class="form-control" required="true" readonly/>
+                                <small class="text-danger"><?php echo form_error('edit_tanggal_dibuat'); ?></small>
+                            </div>
+                        </div>
+                    </div>
 
-                            <?php for ($i=0; $i < count($data_detail_hand_over) ; $i++):?>
-                                <div class="col-md-12 input_barang mb-4 py-3 border border-dark">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Nama Barang</label>
-                                                <input type="hidden" name="edit_id_barang[<?= $i?>]">
-                                                <input type="text" name="autocomplete_edit_id_barang[<?= $i?>]"
-                                                class="form-control" required="true" />
-                                                <small class="text-danger"><?php echo form_error('edit_id_barang'); ?></small>
-                                            </div>
+                    <div class="row justify-content-center rincian_barang_container">
+                        <div class="col-md-12 mt-5">
+                            <h5 class="text-center">Rincian Barang</h5>
+                        </div>
+
+                        <?php for ($i=0; $i < count($data_detail_hand_over) ; $i++):?>
+                            <div class="col-md-12 input_barang mb-4 py-3 border border-dark">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nama Barang</label>
+                                            <input type="hidden" name="edit_id_barang[<?= $i?>]">
+                                            <input type="text" name="autocomplete_edit_id_barang[<?= $i?>]"
+                                            class="form-control" required="true" readonly />
+                                            <small class="text-danger"><?php echo form_error('edit_id_barang'); ?></small>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Jumlah</label>
-                                                <input type="number" name="edit_jumlah_barang[<?= $i?>]"
-                                                value="<?= $data_detail_hand_over[$i]->jumlah ?>"
-                                                class="form-control" required="true" min="0"/>
-                                                <small class="text-danger"><?php echo form_error('edit_jumlah_barang'); ?></small>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Jumlah</label>
+                                            <input type="number" name="edit_jumlah_barang[<?= $i?>]"
+                                            value="<?= $data_detail_hand_over[$i]->jumlah ?>"
+                                            class="form-control" required="true" min="0" readonly/>
+                                            <small class="text-danger"><?php echo form_error('edit_jumlah_barang'); ?></small>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <select name="edit_satuan[<?= $i?>]" class="selectpicker form-control" data-size="3" data-style="btn btn-light btn-sm" title="Single Select" class="form-control">
-                                                    <option value="kodi" <?php echo ($data_detail_hand_over[$i]->satuan == 'kodi') ?  'selected' : ''?>>Kodi</option>
-                                                    <option value="lusin" <?php echo ($data_detail_hand_over[$i]->satuan == 'lusin') ? 'selected' : ''?>>Lusin</option>
-                                                    <option value="pasang" <?php echo ($data_detail_hand_over[$i]->satuan == 'pasang') ? 'selected' : ''?>>Pasang</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-center align-items-center p-0">
-                                            <button type="button" class="btn btn-danger btn-sm  mt-3  remove_rincian_barang">
-                                                <span class="material-icons">
-                                                remove_circle
-                                                </span> Hapus
-                                            </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select name="edit_satuan[<?= $i?>]" class="selectpicker form-control" data-size="3" data-style="btn btn-light btn-sm" title="Single Select" class="form-control" readonly>
+                                                <option value="kodi" <?php echo ($data_detail_hand_over[$i]->satuan == 'kodi') ?  'selected' : ''?>>Kodi</option>
+                                                <option value="lusin" <?php echo ($data_detail_hand_over[$i]->satuan == 'lusin') ? 'selected' : ''?>>Lusin</option>
+                                                <option value="pasang" <?php echo ($data_detail_hand_over[$i]->satuan == 'pasang') ? 'selected' : ''?>>Pasang</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endfor;?>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <button class="btn btn-sm btn-outline-primary mt-3 mb-5" onclick="tambah_rincian_barang()" type="button">
-                                Tambah Item
-                                </button>
                             </div>
-                        </div>
+                        <?php endfor;?>
                     </div>
-                    <div class="card-footer">
-                        <input type="submit" value="Terima Pre Order" class="btn btn-success btn-block">
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

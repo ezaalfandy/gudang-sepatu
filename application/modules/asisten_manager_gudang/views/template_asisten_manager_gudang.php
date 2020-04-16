@@ -22,6 +22,7 @@
   <script src="<?= base_url('assets/')?>js/core/popper.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/arrive.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/moment.min.js"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/chartist.min.js" type="text/javascript"></script>
@@ -38,6 +39,7 @@
 
   <script src="<?= base_url('assets/')?>js/plugins/jquery.bootstrap-wizard.js"></script>
   <script src="<?= base_url('assets/')?>js/plugins/bootstrap-selectpicker.js"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/bootstrap-datetimepicker.min.js"></script>
 </head>
 
 <body class="">

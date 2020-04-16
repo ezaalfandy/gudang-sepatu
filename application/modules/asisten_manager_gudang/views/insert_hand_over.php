@@ -73,15 +73,16 @@
                                         <input type="text" name="autocomplete_insert_id_gudang_tujuan"
                                         value="<?php echo set_value('insert_id_gudang_tujuan'); ?>" id="autocomplete_insert_hand_over_id_gudang_tujuan"
                                         class="form-control" required="true" notEqualTo="#autocomplete_insert_hand_over_id_gudang_asal"/>
+
                                         <small class="text-danger"><?php echo form_error('insert_id_gudang_tujuan'); ?></small>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="insert_hand_over_tanggal_dibuat">Tanggal Terbit</label>
-                                        <input type="date" name="insert_tanggal_dibuat"
-                                        value="<?php echo set_value('insert_tanggal_dibuat'); ?>" id="insert_hand_over_tanggal_dibuat"
-                                        class="form-control" required="true"/>
+                                        <input type="text" name="insert_tanggal_dibuat"
+                                        value="<?php echo set_value('insert_tanggal_dibuat', Date('d-m-Y')); ?>" id="insert_hand_over_tanggal_dibuat"
+                                        class="form-control datepicker" required="true"/>
                                         <small class="text-danger"><?php echo form_error('insert_tanggal_dibuat'); ?></small>
                                     </div>
                                 </div>
@@ -120,7 +121,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12 d-flex justify-content-center align-items-center p-0">
-                                            <button type="button" class="btn btn-danger btn-sm remove_rincian_barang">
+                                            <button type="button" class="btn btn-danger btn-sm  mt-3  remove_rincian_barang">
                                                 <span class="material-icons">
                                                 remove_circle
                                                 </span> Hapus
@@ -202,7 +203,8 @@
   
   $(document).ready(function () {
     md.initMaterialWizard('#wizardHandOver', $('#formInsertHandOver').validate());
-
+    md.initFormExtendedDatetimepickers();
+    
     $('#formInsertHandOver').on('click', '.remove_rincian_barang', function()
         {
             if($('.input_barang').length > 1)

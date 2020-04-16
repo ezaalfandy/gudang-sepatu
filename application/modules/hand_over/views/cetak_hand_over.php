@@ -82,7 +82,7 @@
 
                 </div>
                 <h5 class="font-weight-bold mt-5">
-                    <u><?= ucwords($this->session->userdata('nama'));?></u>
+                    <u><?= $data_hand_over->nama?></u>
                 </h5>        
             </div>
         </div>
