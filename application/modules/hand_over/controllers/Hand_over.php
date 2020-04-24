@@ -11,11 +11,6 @@ class Hand_over extends MY_Controller {
         $this->load->model('Hand_over_model');
         
     }
-    
-    public function index()
-    {
-        
-    }
 
     public function _remap($method, $params = array())
     {
@@ -143,10 +138,10 @@ class Hand_over extends MY_Controller {
     public function edit_hand_over($id_hand_over){
     
         $id_gudang_asal = $this->input->post('edit_id_gudang_asal', TRUE);
-        $id_gudang = $this->input->post('edit_id_gudang_tujuan', TRUE);
+        $id_gudang_tujuan = $this->input->post('edit_id_gudang_tujuan', TRUE);
     
-        $kode_gudang_asal = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_asal))->kode_gudang_asal;
-        $kode_gudang_tujuan = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang))->kode_gudang;
+        $kode_gudang_asal = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_asal))->kode_gudang;
+        $kode_gudang_tujuan = $this->Base_model->get_specific('gudang', array('id_gudang' => $id_gudang_tujuan))->kode_gudang;
         $kode_hand_over = sprintf('%05d', $id_hand_over);
     
         $array_model = array(
@@ -166,10 +161,9 @@ class Hand_over extends MY_Controller {
     public function edit_detail_hand_over($id_hand_over){
     
         $id_gudang = $this->input->post('edit_id_gudang_tujuan', TRUE);
-    
         $id_barang = $this->input->post('edit_id_barang[]');
-        $jumlah = $this->input->post('edit_jumlah_barang[]');
-        $satuan = $this->input->post('edit_satuan[]');
+        $jumlah = array_values($this->input->post('edit_jumlah_barang[]'));
+        $satuan = array_values($this->input->post('edit_satuan[]'));
         
         /*
             Tahapan edit detail hand_over

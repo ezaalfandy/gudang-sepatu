@@ -143,19 +143,21 @@ class Pre_order extends MY_Controller {
 
         $id_gudang = $this->input->post('edit_id_gudang_tujuan', TRUE);
 
-        $id_barang = $this->input->post('edit_id_barang[]');
-        $jumlah = $this->input->post('edit_jumlah_barang[]');
-        $satuan = $this->input->post('edit_satuan[]');
-        $harga_per_satuan = $this->input->post('edit_harga_per_satuan[]');
+        $id_barang = array_values($this->input->post('edit_id_barang[]'));
+        $jumlah = array_values($this->input->post('edit_jumlah_barang[]'));
+        $satuan = array_values($this->input->post('edit_satuan[]'));
+        $harga_per_satuan = array_values($this->input->post('edit_harga_per_satuan[]'));
         
         /*
             Tahapan edit detail pre_order
             1. Hapus data lama
             2. Input data detail pre_order yang baru
         */
+        
         if($this->Base_model->delete('detail_pre_order', array('id_pre_order' => $id_pre_order)) == true)
         {   
-            for ($i=0; $i < count($id_barang); $i++) { 
+            for ($i=0; $i < count($id_barang); $i++) 
+            { 
                 $array_model = array(
                     'id_pre_order' => $id_pre_order,
                     'id_barang' => $id_barang[$i],

@@ -22,6 +22,7 @@
   <script src="<?= base_url('assets/')?>js/core/popper.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/arrive.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/moment.min.js"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
   <script src="<?= base_url('assets/')?>js/plugins/chartist.min.js" type="text/javascript"></script>
@@ -34,15 +35,17 @@
   <script src="<?= base_url('assets/')?>js/plugins/notEqualTo.js" type="text/javascript"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/jquery.autocomplete.min.js" type="text/javascript"></script>
-  <script src="<?= base_url('assets/')?>js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/jquery.bootstrap-wizard.js"></script>
   <script src="<?= base_url('assets/')?>js/plugins/bootstrap-selectpicker.js"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/onscan.min.js"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/fullcalendar.min.js"></script>
+  <script src="<?= base_url('assets/')?>js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
 </head>
 
-<body class="<?= ($this->uri->segment(2) == 'view-insert-penjualan')? 'sidebar-mini' : ' '?>">
+<body class="sidebar-mini">
   <div class="wrapper ">
-    <div class="sidebar" data-color="white" data-background-color="red" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
+    <div class="sidebar" data-color="purple" data-background-color="white" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
       <div class="logo">
         <a href="javascript:void(0)" class="simple-text logo-mini">
           JM
@@ -94,6 +97,12 @@
               <p> Dashboard </p>
             </a>
           </li>
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/view-kalender')?>">
+              <i class="material-icons">date_range</i>
+              <p> Kalender </p>
+            </a>
+          </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-stok-barang'){echo 'active';}?>">
             <a class="nav-link" href="<?= base_url('admin-gudang/view-stok-barang')?>">
               <i class="material-icons">assessment</i>
@@ -140,7 +149,7 @@
             <div class="collapse" id="penjualan">
               <ul class="nav">
                 <li class="nav-item ">
-                  <a class="nav-link" href="<?= base_url('admin-gudang/view-data-penjualan')?>">
+                  <a class="nav-link" href="<?= base_url('admin-gudang/view-penjualan')?>">
                     <span class="sidebar-mini"> DP </span>
                     <span class="sidebar-normal"> Data Penjualan </span>
                   </a>
@@ -178,30 +187,41 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
+            <form class="navbar-form" action="<?= base_url('admin-gudang/search-barang')?>" method="GET">
+              <div class="input-group no-border">
+                <input type="text" id="autocomplete_nav_search_barang" name="search_string" class="form-control" placeholder="JMJ21MR42">
+                <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                  <i class="material-icons">search</i>
+                  <div class="ripple-container"></div>
+                </button>
+              </div>
+            </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="#pablo">
-                  <i class="material-icons">dashboard</i>
-                  <p class="d-lg-none d-md-block">
-                    Stats
-                  </p>
-                </a>
-              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
+                  <span class="notification"><?= count($this->template_notifikasi_barang_habis)?></span>
                   <p class="d-lg-none d-md-block">
-                    Some Actions
+                    Barang Stok Menipis
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  <?php 
+                    $notifikasi = $this->template_notifikasi_barang_habis;
+                    for ($i=0; $i < count($notifikasi); $i++) { 
+                      if($i < 5){
+                        echo '<a class="dropdown-item" href="'.base_url('admin-gudang/view-detail-barang/').$notifikasi[$i]->kode_barang.'">
+                          '.$notifikasi[$i]->kode_barang.' (Sisa '.$notifikasi[$i]->jumlah_stok.' Pasang)'.
+                        '</a>';
+                      }else{
+                        echo '<a class="dropdown-item" href="'.base_url('admin-gudang/view-stok-barang').'">
+                          Cek Selengkapnya
+                        </a>';
+                        break;
+                      }
+                    }
+                  ?>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -240,6 +260,35 @@
       </footer>
     </div>
   </div>  
+  
+  <script>
+    
+    var template = {
+      setInputAutoComplete : function($element, $lookup){
+        $($element).autocomplete({
+            lookup: $lookup,
+            onSelect: function (suggestion) {
+              $hidden_input = $($element).siblings('[type="hidden"]');
+
+              $hidden_input.val(suggestion.code);
+            },
+            autoSelectFirst: false
+        });
+      }
+    }
+    <?php
+      $barang_lookup = [];
+      foreach ($this->template_search_autocomplete_barang as $k => $v) {
+        $barang_lookup[] = array(
+          "value" => $v->kode_barang,
+          "code" => $v->id_barang
+        );
+      }
+    ?>
+    $template_autocomplete_search_barang = JSON.parse('<?= json_encode($barang_lookup);?>');
+    template.setInputAutoComplete('#autocomplete_nav_search_barang', $template_autocomplete_search_barang);
+
+  </script>
 </body>
 
 </html>

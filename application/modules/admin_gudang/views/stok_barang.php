@@ -6,7 +6,7 @@
                     <div class="card-icon">
                         <i class="material-icons">assessment</i>
                     </div>
-                    <h4 class="card-title"><?= $data_gudang->kode_gudang.' '.$data_gudang->kabupaten_kota.' ('.$data_gudang->nomor_telepon.')'?></h4>
+                    <h4 class="card-title"><?= $data_gudang->kode_gudang.' '.$data_gudang->kabupaten_kota?></h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -19,6 +19,7 @@
                                             <th>Kode Barang</th>
                                             <th>Nama</th>
                                             <th>Stok</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -36,6 +37,14 @@
                                                 </td>
                                                 <td>
                                                     <?= $value->jumlah_stok?>
+                                                </td>
+                                                <td>
+                                                    <a href="<?= base_url('admin-gudang/view-detail-barang/').$value->kode_barang?>" class="btn btn-primary btn-block btn-sm">
+                                                        <i class="material-icons">
+                                                            search
+                                                        </i>
+                                                        Lihat
+                                                    </a>
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
@@ -60,7 +69,7 @@
                 [10, 25, 50, "All"]
             ],
             "columnDefs": [
-                { "width": "20%", "targets": -1 }
+                { "width": "10%", "targets": -1 }
             ],
             responsive: false
         });

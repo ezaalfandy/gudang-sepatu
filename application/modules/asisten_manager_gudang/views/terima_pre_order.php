@@ -4,25 +4,25 @@
         
             <?php
                 if($this->session->flashdata('status') === 'success'){
-                echo '
-                    <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Success - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
+                    echo '
+                        <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="material-icons">close</i>
+                        </button>
+                        <span>
+                            <b> Success - </b> '.$this->session->userdata('message').'</span>
+                        </div>
+                    ';
                 }elseif ($this->session->flashdata('status') === 'failed') {
-                echo '
-                    <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Danger - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
+                    echo '
+                        <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="material-icons">close</i>
+                        </button>
+                        <span>
+                            <b> Danger - </b> '.$this->session->userdata('message').'</span>
+                        </div>
+                    ';
                 }
             ?>
         </div>

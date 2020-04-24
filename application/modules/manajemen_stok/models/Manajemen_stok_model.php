@@ -115,13 +115,43 @@ class Manajemen_stok_model extends CI_Model {
         return true;
     }
 
-    public function get_specific_stok_barang($where){
+    public function get_all_specific_stok_barang($where){
         return $this->db->join('barang', 'barang.id_barang = stok_barang.id_barang')
                         ->join('gudang', 'gudang.id_gudang = stok_barang.id_gudang')
                         ->where($where)
                         ->get('stok_barang')
                         ->result();
     }
+
+    public function search_all_specific_stok_barang($where, $like){
+        return $this->db->join('barang', 'barang.id_barang = stok_barang.id_barang')
+                        ->join('gudang', 'gudang.id_gudang = stok_barang.id_gudang')
+                        ->where($where)
+                        ->or_like($like)
+                        ->get('stok_barang')
+                        ->result();
+    }
+
+    public function get_all_barang_akan_habis()
+    {
+        return $this->db->join('barang', 'barang.id_barang = stok_barang.id_barang')
+                        ->join('gudang', 'gudang.id_gudang = stok_barang.id_gudang')
+                        ->having('stok_barang.jumlah_stok < barang.alarm_stok_minimal')
+                        ->get('stok_barang')
+                        ->result();
+    }
+
+    public function get_all_specific_barang_akan_habis($where)
+    {
+        return $this->db->join('barang', 'barang.id_barang = stok_barang.id_barang')
+                        ->join('gudang', 'gudang.id_gudang = stok_barang.id_gudang')
+                        ->having('stok_barang.jumlah_stok < barang.alarm_stok_minimal')
+                        ->where('barang.status_barang !=', 'nonaktif')
+                        ->where($where)
+                        ->get('stok_barang')
+                        ->result();
+    }
+
     
 
 }

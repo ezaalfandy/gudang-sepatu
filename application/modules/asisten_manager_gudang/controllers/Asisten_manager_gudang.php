@@ -4,6 +4,7 @@
     
     class Asisten_manager_gudang extends MY_Controller {
         
+        public $template_search_autocomplete_barang = NULL;
         public function __construct()
         {
             parent::__construct();            
@@ -11,6 +12,9 @@
             $this->load->module('manajemen_stok');
             $this->load->module('hand_over');
             $this->load->module('image_manipulation');
+            $this->load->module('grafik');
+            $this->load->module('penjualan');
+            $this->template_search_autocomplete_barang = $this->Base_model->get_all('barang');
         }
         
         public function index()
@@ -35,6 +39,33 @@
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {
+                $data['data_total_barang'] = $this->Base_model->count_all('barang');
+                $data['data_total_penjualan'] = $this->Base_model->count_all('penjualan');
+                $data['data_total_pre_order'] = $this->Base_model->count_all('pre_order');
+                $data['data_total_hand_over'] = $this->Base_model->count_all('hand_over');
+
+                $where_grafik_penjualan = array(
+                    'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 7 DAY'
+                );
+                $data['data_grafik_penjualan_tujuh_hari'] = $this->grafik->get_grafik_penjualan($where_grafik_penjualan);
+
+                $where_grafik_pre_order = array(
+                    'pre_order.tanggal_setor >=' => 'DATE(NOW()) - INTERVAL 7 DAY'
+                );
+                $data['data_grafik_pre_order_tujuh_hari'] = $this->grafik->get_grafik_pre_order($where_grafik_pre_order);
+
+                
+                $where_grafik_hand_over = array(
+                    'hand_over.tanggal_dibuat >=' => 'DATE(NOW()) - INTERVAL 7 DAY'
+                );
+                $data['data_grafik_hand_over_tujuh_hari'] = $this->grafik->get_grafik_hand_over($where_grafik_hand_over);
+                $data['data_barang_akan_habis'] = $this->manajemen_stok->get_all_barang_akan_habis();
+
+                $where_grafik_produk_terlaris = array(
+                    'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 1 MONTH',
+                );
+                $data['data_produk_terlaris_bulan_ini'] = $this->grafik->get_all_produk_terlaris($where_grafik_produk_terlaris);
+
                 $data['main_view'] = 'dashboard';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
@@ -62,7 +93,39 @@
                 if($data['data_gudang'] !== null)
                 {   
                     $id_gudang = $data['data_gudang']->id_gudang;
-                    $data['data_stok_barang'] = $this->manajemen_stok->get_specific_stok_barang(array('stok_barang.id_gudang' => $id_gudang));
+                    $data['data_stok_barang'] = $this->manajemen_stok->get_all_specific_stok_barang(array('stok_barang.id_gudang' => $id_gudang));
+                    
+                    $where_grafik_penjualan = array(
+                        'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 7 DAY',
+                        'penjualan.id_gudang' => $data['data_gudang']->id_gudang
+                    );
+                    $data['data_grafik_penjualan_tujuh_hari'] = $this->grafik->get_grafik_penjualan($where_grafik_penjualan);
+
+                    $where_grafik_pre_order = array(
+                        'pre_order.tanggal_setor >=' => 'DATE(NOW()) - INTERVAL 7 DAY',
+                        'pre_order.id_gudang_tujuan' => $data['data_gudang']->id_gudang
+                    );
+                    $data['data_grafik_pre_order_tujuh_hari'] = $this->grafik->get_grafik_pre_order($where_grafik_pre_order);
+
+                    
+                    $where_grafik_hand_over = array(
+                        'hand_over.tanggal_dibuat >=' => 'DATE(NOW()) - INTERVAL 7 DAY',
+                        'hand_over.id_gudang_asal' => $data['data_gudang']->id_gudang
+                    );
+                    $data['data_grafik_hand_over_tujuh_hari'] = $this->grafik->get_grafik_hand_over($where_grafik_hand_over);
+                    
+                    $where_stok_barang_akan_habis = array(
+                        'gudang.id_gudang' => $data['data_gudang']->id_gudang
+                    );
+                    $data['data_barang_akan_habis'] = $this->manajemen_stok->get_all_specific_barang_akan_habis($where_stok_barang_akan_habis);
+
+                    $where_grafik_produk_terlaris = array(
+                        'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 1 MONTH',
+                        'penjualan.id_gudang' => $data['data_gudang']->id_gudang
+                    );
+                    $data['data_produk_terlaris_bulan_ini'] = $this->grafik->get_all_produk_terlaris($where_grafik_produk_terlaris);
+
+
                     $data['main_view'] = 'detail_gudang';
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
                 }else
@@ -550,6 +613,26 @@
             }
         }          
 
+        public function search_barang()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {   
+                $or_like = array(
+                    'kode_barang' => $this->input->get('search_string'),
+                    'merek' => $this->input->get('search_string'),
+                    'warna' => $this->input->get('search_string'),
+                    'ukuran' => $this->input->get('search_string')
+                );
+                $data['data_barang'] = $this->Base_model->get_all_or_like('barang', $or_like);
+                $data['data_search_string'] = $this->input->get('search_string');
+                
+                $data['main_view'] = 'search_result';
+                $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('Account');
+            }
+        }
+
         public function view_barang()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -573,7 +656,53 @@
                 {   
                     $id_barang = $data['data_barang']->id_barang;
                     $data['data_gambar_barang'] = $this->Base_model->get_all_specific('gambar_barang', array('id_barang' => $id_barang ));
-                    $data['data_stok_barang'] = $this->manajemen_stok->get_specific_stok_barang(array('stok_barang.id_barang' => $id_barang));
+                    $data['data_stok_barang'] = $this->manajemen_stok->get_all_specific_stok_barang(array('stok_barang.id_barang' => $id_barang));
+
+                    
+                    $where_grafik_penjualan = array(
+                        'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 1 MONTH',
+                        'barang.id_barang' => $data['data_barang']->id_barang
+                    );
+                    $data['data_grafik_penjualan_tujuh_hari'] = $this->grafik->get_grafik_penjualan($where_grafik_penjualan);
+
+                    $where_grafik_pre_order = array(
+                        'pre_order.tanggal_setor >=' => 'DATE(NOW()) - INTERVAL 1 MONTH'
+                    );
+                    $data['data_grafik_pre_order_tujuh_hari'] = $this->grafik->get_grafik_pre_order($where_grafik_pre_order);
+                    
+                    $where_grafik_penjualan_all_varian = array(
+                        'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 1 MONTH',
+                        'barang.merek' => $data['data_barang']->merek,
+                        'barang.tipe' => $data['data_barang']->tipe
+                    );
+                    $group_by_penjualan_all_varian = array('merek', 'tipe', 'warna', 'DATE(penjualan.tanggal_penjualan)');
+                    $data['data_grafik_penjualan_all_varian'] = $this->grafik->get_grafik_penjualan(
+                        $where_grafik_penjualan_all_varian,
+                        $group_by_penjualan_all_varian
+                    );
+
+                    
+                    $where_grafik_penjualan_berdasarkan_ukuran = array(
+                        'penjualan.tanggal_penjualan >=' => 'DATE(NOW()) - INTERVAL 6 MONTH',
+                        'barang.merek' => $data['data_barang']->merek,
+                        'barang.tipe' => $data['data_barang']->tipe
+                    );
+                    $group_by_penjualan_berdasarkan_ukuran = array('merek', 'tipe', 'warna');
+                    $data['data_grafik_penjualan_berdasarkan_ukuran'] = $this->grafik->get_grafik_penjualan(
+                        $where_grafik_penjualan_berdasarkan_ukuran,
+                        $group_by_penjualan_berdasarkan_ukuran
+                    );
+                    
+                    
+                    $where_barang_sejenis = array(
+                        'barang.merek' => $data['data_barang']->merek,
+                        'barang.tipe' => $data['data_barang']->tipe
+                    );
+                    $data['data_barang_sejenis'] = $this->Base_model->get_all_specific(
+                        'barang',
+                        $where_barang_sejenis
+                    );
+
                     $data['main_view'] = 'detail_barang';
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
                 }else
@@ -670,7 +799,7 @@
                             );
                                 
                             $this->session->set_flashdata($array);
-                            redirect('asisten-manager-gudang/view_barang');
+                            redirect('asisten-manager-gudang/view-barang');
                         }
                         
                     }
@@ -721,7 +850,7 @@
                             );
                         }
                         $this->session->set_flashdata($array);
-                        redirect('asisten-manager-gudang/view_barang');
+                        redirect('asisten-manager-gudang/view-barang');
                 }else{
                     //VALIDASI FORM GAGAL
                     $this->view_barang();
@@ -817,7 +946,7 @@
                             );
                         }
                         $this->session->set_flashdata($array);
-                        redirect('asisten-manager-gudang/view_barang');
+                        redirect('asisten-manager-gudang/view-barang');
                 }else{
                     $this->view_barang();
                 }
@@ -840,7 +969,7 @@
             }
         }     
 
-        public function get_specific_stok_barang()
+        public function get_all_specific_stok_barang()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {   
@@ -849,7 +978,7 @@
                     'jumlah_stok >' => "0"
                 ); 
                 
-                echo $this->manajemen_stok->get_specific_stok_barang($where, TRUE);
+                echo $this->manajemen_stok->get_all_specific_stok_barang($where, TRUE);
             }else
             {
                 redirect('Account');
@@ -859,7 +988,7 @@
         public function view_supplier()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-        {
+            {
                 $data['data_supplier'] = $this->Base_model->get_all('supplier');
                 $data['main_view'] = 'supplier';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
@@ -867,7 +996,35 @@
                 redirect('Account');
             }
         }
-                                                     
+        
+        public function view_detail_supplier()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $data['data_supplier'] = $this->Base_model->get_specific('supplier', array('kode_supplier' => $this->uri->segment(3)));
+                if($data['data_supplier'] !== null)
+                {   
+                    $id_supplier = $data['data_supplier']->id_supplier;
+                    $data['data_pre_order'] = $this->pre_order->get_all_specific_pre_order(array('pre_order.id_supplier' => $id_supplier));
+  
+                    $where_grafik_pre_order = array(
+                        'pre_order.tanggal_setor >=' => 'DATE(NOW()) - INTERVAL 1 MONTH',
+                        'pre_order.id_supplier' => $id_supplier,
+                    );
+                    $data['data_grafik_pre_order'] = $this->grafik->get_grafik_pre_order($where_grafik_pre_order);
+    
+                    $data['main_view'] = 'detail_supplier';
+                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                }else
+                {
+                    $this->page_missing();
+                }
+                
+            }else{
+                redirect('Account');
+            }
+        }
+
         public function insert_supplier()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -1083,13 +1240,17 @@
                 $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('kode_pre_order' => $kode_pre_order));
 
                 if($data['data_pre_order'] !== null)
-                {
-                    $data['data_gudang'] = $this->Base_model->get_all('gudang');
-                    $data['data_supplier'] = $this->Base_model->get_all('supplier');
-                    $data['data_barang'] = $this->Base_model->get_all('barang');
-                    $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
-                    $data['main_view'] = 'edit_pre_order';
-                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                {   
+                    if($data['data_pre_order']->status_pre_order == 'diterima'){
+                        $this->page_missing();
+                    }else{
+                        $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                        $data['data_supplier'] = $this->Base_model->get_all('supplier');
+                        $data['data_barang'] = $this->Base_model->get_all('barang');
+                        $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
+                        $data['main_view'] = 'edit_pre_order';
+                        $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                    }
                 }else
                 {
                     $this->page_missing();
@@ -1380,7 +1541,8 @@
 
                     $id_pre_order = $this->input->post('edit_id_pre_order', TRUE);
                     $edit_pre_order = $this->pre_order->edit_pre_order($id_pre_order);
-    
+                    $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('id_pre_order' => $id_pre_order));
+
                     if($edit_pre_order !== false)
                     {
                         if($this->pre_order->edit_detail_pre_order($id_pre_order) == true)
@@ -1413,7 +1575,7 @@
                 }
                 
                 $this->session->set_flashdata($array);
-                $this->view_edit_pre_order($this->input->post('edit_id_pre_order', TRUE));
+                $this->view_edit_pre_order($data['data_pre_order']->kode_pre_order);
             }else
             {
                 redirect('Account');
@@ -1429,16 +1591,21 @@
                 
                 if($data['data_hand_over'] !== null)
                 {
-                    
-                    $where_stok_barang = array(
-                        'stok_barang.id_gudang' => $data['data_hand_over']->id_gudang_asal,
-                        'jumlah_stok >' => "0"
-                    ); 
-                    $data['data_gudang'] = $this->Base_model->get_all('gudang');
-                    $data['data_barang'] = $this->manajemen_stok->get_specific_stok_barang($where_stok_barang);
-                    $data['data_detail_hand_over'] = $this->hand_over->get_all_specific_detail_hand_over(array('id_hand_over' => $data['data_hand_over']->id_hand_over));
-                    $data['main_view'] = 'edit_hand_over';
-                    $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                    if($data['data_hand_over']->status_hand_over == 'diterima')
+                    {
+                        $this->page_missing();
+                    }else
+                    {
+                        $where_stok_barang = array(
+                            'stok_barang.id_gudang' => $data['data_hand_over']->id_gudang_asal,
+                            'jumlah_stok >' => "0"
+                        ); 
+                        $data['data_gudang'] = $this->Base_model->get_all('gudang');
+                        $data['data_barang'] = $this->manajemen_stok->get_all_specific_stok_barang($where_stok_barang);
+                        $data['data_detail_hand_over'] = $this->hand_over->get_all_specific_detail_hand_over(array('id_hand_over' => $data['data_hand_over']->id_hand_over));
+                        $data['main_view'] = 'edit_hand_over';
+                        $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+                    }
                 }else
                 {
                     $this->page_missing();
@@ -1463,7 +1630,7 @@
                         'jumlah_stok >' => "0"
                     ); 
                     $data['data_gudang'] = $this->Base_model->get_all('gudang');
-                    $data['data_barang'] = $this->manajemen_stok->get_specific_stok_barang($where_stok_barang);
+                    $data['data_barang'] = $this->manajemen_stok->get_all_specific_stok_barang($where_stok_barang);
                     $data['data_detail_hand_over'] = $this->hand_over->get_all_specific_detail_hand_over(array('id_hand_over' => $data['data_hand_over']->id_hand_over));
                     $data['main_view'] = 'detail_hand_over';
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
@@ -1490,7 +1657,7 @@
                         'jumlah_stok >' => "0"
                     ); 
                     $data['data_gudang'] = $this->Base_model->get_all('gudang');
-                    $data['data_barang'] = $this->manajemen_stok->get_specific_stok_barang($where_stok_barang);
+                    $data['data_barang'] = $this->manajemen_stok->get_all_specific_stok_barang($where_stok_barang);
                     $data['data_detail_hand_over'] = $this->hand_over->get_all_specific_detail_hand_over(array('id_hand_over' => $data['data_hand_over']->id_hand_over));
                     $data['main_view'] = 'terima_hand_over';
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
@@ -1805,6 +1972,7 @@
                 redirect('Account');
             }
         }
+
         public function get_specific_hand_over()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
@@ -1817,7 +1985,31 @@
             }
         }                                           
                             
+        public function view_kalender()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $data['data_pre_order'] = $this->Base_model->get_all('pre_order');
+                $data['data_hand_over'] = $this->Base_model->get_all('hand_over');
+                $data['main_view'] = 'kalender';
+                $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('Account');
+            }
+        }
 
+        public function view_penjualan()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {   
+                $data['data_penjualan'] = $this->penjualan->get_all_penjualan();
+
+                $data['main_view'] = 'penjualan';
+                $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('Account');
+            }
+        }
 
     }
     

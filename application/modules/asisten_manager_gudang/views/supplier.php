@@ -86,7 +86,6 @@
               <thead>
                 <tr>
                   <td>No</td>
-                  <td> Id Supplier</td>
                   <td> Kode Supplier</td>
                   <td> Nama</td>
                   <td> Alamat</td>
@@ -98,22 +97,34 @@
                 <?php foreach($data_supplier as $k_supplier => $v_supplier):?>
                 <tr>
                   <td></td>
-                  <td><?= $v_supplier->id_supplier?></td>
                   <td><?= $v_supplier->kode_supplier?></td>
                   <td><?= $v_supplier->nama_supplier?></td>
                   <td><?= $v_supplier->alamat_supplier?></td>
                   <td><?= $v_supplier->telepon_supplier?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm btn-block" onclick="deleteSupplier(<?= $v_supplier->id_supplier?>)">
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalSupplier(<?= $v_supplier->id_supplier?>)">
-                      <i class="material-icons">
-                        create
-                      </i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-4 px-1">
+                        <a class="btn btn-primary btn-sm" href="<?= base_url('asisten-manager-gudang/view-detail-supplier/').$v_supplier->kode_supplier?>">
+                          <i class="material-icons">
+                            search
+                          </i>
+                        </a>
+                      </div>
+                      <div class="col-md-4 px-1">
+                        <button class="btn btn-info btn-sm" onclick="openModalSupplier(<?= $v_supplier->id_supplier?>)">
+                          <i class="material-icons">
+                            create
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-4 px-1">
+                        <button class="btn btn-danger btn-sm" onclick="deleteSupplier(<?= $v_supplier->id_supplier?>)">
+                          <i class="material-icons">
+                            delete
+                          </i>
+                        </button>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -191,7 +202,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 }
+        { "width": "25%", "targets": -1 }
       ],
       responsive: false
     });

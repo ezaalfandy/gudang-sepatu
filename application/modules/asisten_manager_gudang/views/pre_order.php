@@ -147,11 +147,6 @@
                       <td>
                         <div class="row">
                           <div class="col-md-12">
-                            <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-edit-pre-order/').$v_pre_order->kode_pre_order?>">
-                              Edit
-                            </a>
-                          </div>
-                          <div class="col-md-12">
                             <button class="btn btn-danger btn-sm btn-block" onclick="deletePreOrder(<?= $v_pre_order->id_pre_order?>)">
                               Hapus
                             </button>

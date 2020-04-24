@@ -139,7 +139,7 @@
                           </div>
                           <div class="col-md-6 px-1">
                             <a class="btn btn-info btn-sm btn-block" href="<?= base_url('asisten-manager-gudang/view-detail-hand-over/').$v_hand_over->kode_hand_over?>">
-                              Edit
+                              Lihat
                             </a>
                           </div>
                           <div class="col-md-12 px-1">

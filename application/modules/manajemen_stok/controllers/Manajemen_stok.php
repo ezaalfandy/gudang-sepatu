@@ -95,13 +95,30 @@ class Manajemen_stok extends MY_Controller {
             return false;
         }
     }
-    public function get_specific_stok_barang($where, $json = FALSE)
+
+    public function get_all_specific_stok_barang($where, $json = FALSE)
     {
-        $result = $this->Manajemen_stok_model->get_specific_stok_barang($where);
-        
+        $result = $this->Manajemen_stok_model->get_all_specific_stok_barang($where);
         return ($json == true) ? json_encode($result) : $result;
     }
 
+    public function search_all_specific_stok_barang($where, $like, $json = FALSE)
+    {
+        $result = $this->Manajemen_stok_model->search_all_specific_stok_barang($where, $like);
+        return ($json == true) ? json_encode($result) : $result;
+    }
+
+    public function get_all_barang_akan_habis($json = FALSE)
+    {
+        $result = $this->Manajemen_stok_model->get_all_barang_akan_habis();
+        return ($json == true) ? json_encode($result) : $result;
+    }
+
+    public function get_all_specific_barang_akan_habis($where, $json = FALSE)
+    {
+        $result = $this->Manajemen_stok_model->get_all_specific_barang_akan_habis($where);
+        return ($json == true) ? json_encode($result) : $result;
+    }
 }
 
 /* End of file Manajemen_stok.php */

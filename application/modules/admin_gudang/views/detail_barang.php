@@ -80,7 +80,7 @@
                                                 </u>
                                             </td>
                                             <td><?= $v->ukuran?></td>
-                                            <td><?= $v->stok_tersedia?></td>
+                                            <td><?= $v->jumlah_stok?></td>
                                         </tr>
                                     <?php endforeach;?>
                                 </tbody>
@@ -92,58 +92,6 @@
         </div>
         <div class="col-md-8">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header card-header-primary card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">assessment</i>
-                            </div>
-                            <h4 class="card-title">
-                                <?= $data_barang->merek.' '.$data_barang->tipe.' '.$data_barang->warna.' '.$data_barang->ukuran?>
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="table-responsive table-sales">
-                                        <table class="table table-bordered table-striped table-hover" id="tableBarang">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        No
-                                                    </th>
-                                                    <th>
-                                                        Gudang
-                                                    </th>
-                                                    <th>
-                                                        Stok
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $n= 1;?>
-                                                <?php foreach ($data_stok_barang as $key => $value):?>
-                                                <tr
-                                                    <?= ($value->jumlah_stok < $value->alarm_stok_minimal)? 'class="table-danger"' : '' ?>>
-                                                    <td>
-                                                        <?= $n++;?>
-                                                    </td>
-                                                    <td>
-                                                        <?= $value->kode_gudang.' - '.$value->alamat.', '.$value->kabupaten_kota.' '.$value->provinsi.' ('.$value->nomor_telepon.')'?>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <?= $value->jumlah_stok?>
-                                                    </td>
-                                                </tr>
-                                                <?php endforeach;?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-12">
                     <div class="card card-chart">
                         <div class="card-header card-header-success" data-header-animation="false">

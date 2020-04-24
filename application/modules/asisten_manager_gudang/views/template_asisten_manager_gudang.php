@@ -35,14 +35,15 @@
   <script src="<?= base_url('assets/')?>js/plugins/notEqualTo.js" type="text/javascript"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/jquery.autocomplete.min.js" type="text/javascript"></script>
-  <script src="<?= base_url('assets/')?>js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
 
   <script src="<?= base_url('assets/')?>js/plugins/jquery.bootstrap-wizard.js"></script>
   <script src="<?= base_url('assets/')?>js/plugins/bootstrap-selectpicker.js"></script>
   <script src="<?= base_url('assets/')?>js/plugins/bootstrap-datetimepicker.min.js"></script>
+  <script src="<?= base_url('assets/')?>js/plugins/fullcalendar.min.js"></script>
+  <script src="<?= base_url('assets/')?>js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
 </head>
 
-<body class="">
+<body class="sidebar-mini">
   <div class="wrapper ">
     <div class="sidebar" data-color="rose" data-background-color="black" data-image="<?= base_url('assets/')?>img/sidebar-sepatu.jpg">
       <div class="logo">
@@ -96,14 +97,20 @@
               <p> Dashboard </p>
             </a>
           </li>
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-kalender')?>">
+              <i class="material-icons">date_range</i>
+              <p> Kalender </p>
+            </a>
+          </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-gudang'){echo 'active';}?>">
             <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-gudang')?>">
               <i class="material-icons">home</i>
               <p>Gudang</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link <?php if($this->uri->segment(2) == 'view-supplier'){echo 'active';}?>" href="<?= base_url('asisten-manager-gudang/view-supplier')?>">
+          <li class="nav-item  <?php if($this->uri->segment(2) == 'view-supplier'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-supplier')?>">
               <i class="material-icons">person</i>
               <p> Supplier</p>
             </a>
@@ -145,34 +152,15 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
+            <a class="nav-link <?php if($this->uri->segment(2) == 'view-penjualan'){echo 'active';}?>" href="<?= base_url('asisten-manager-gudang/view-penjualan')?>">
               <i class="material-icons">shopping_cart</i>
-              <p> Penjualan
-                <b class="caret"></b>
-              </p>
+              <p> Penjualan</p>
             </a>
-            <div class="collapse" id="pagesExamples">
-              <ul class="nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="../examples/pages/pricing.html">
-                    <span class="sidebar-mini"> P </span>
-                    <span class="sidebar-normal"> Pricing </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="../examples/pages/rtl.html">
-                    <span class="sidebar-mini"> RS </span>
-                    <span class="sidebar-normal"> RTL Support </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
           </li>
         </ul>
       </div>
     </div>
     <div class="main-panel">
-      <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
@@ -192,32 +180,16 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
+            <form class="navbar-form" action="<?= base_url('asisten-manager-gudang/search-barang')?>" method="GET">
+              <div class="input-group no-border">
+                <input type="text" id="autocomplete_nav_search_barang" name="search_string" class="form-control" placeholder="JMJ21MR42">
+                <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                  <i class="material-icons">search</i>
+                  <div class="ripple-container"></div>
+                </button>
+              </div>
+            </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="#pablo">
-                  <i class="material-icons">dashboard</i>
-                  <p class="d-lg-none d-md-block">
-                    Stats
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
-                  <p class="d-lg-none d-md-block">
-                    Some Actions
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
-                </div>
-              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false">
@@ -254,6 +226,34 @@
       </footer>
     </div>
   </div>  
+  <script>
+    
+    var template = {
+      setInputAutoComplete : function($element, $lookup){
+        $($element).autocomplete({
+            lookup: $lookup,
+            onSelect: function (suggestion) {
+              $hidden_input = $($element).siblings('[type="hidden"]');
+
+              $hidden_input.val(suggestion.code);
+            },
+            autoSelectFirst: false
+        });
+      }
+    }
+    <?php
+      $template_barang_lookup = [];
+      foreach ($this->template_search_autocomplete_barang as $k => $v) {
+        $barang_lookup[] = array(
+          "value" => $v->kode_barang,
+          "code" => $v->id_barang
+        );
+      }
+    ?>
+    $template_autocomplete_search_barang = JSON.parse('<?= json_encode($template_barang_lookup);?>');
+    template.setInputAutoComplete('#autocomplete_nav_search_barang', $template_autocomplete_search_barang);
+
+  </script>
 </body>
 
 </html>

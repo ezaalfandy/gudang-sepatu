@@ -13,7 +13,8 @@
 <body>
 
     <?php foreach($data_detail_pre_order as $k_detail_pre_order => $v_detail_pre_order){
-        for ($i=0; $i < $v_detail_pre_order->jumlah; $i++) { 
+        $pengali = convert_satuan_to_pengali($v_detail_pre_order->satuan);
+        for ($i=0; $i < $v_detail_pre_order->jumlah * $pengali; $i++) { 
             echo '
                 <div class="barcode'.$v_detail_pre_order->id_barang.' barcode">
 

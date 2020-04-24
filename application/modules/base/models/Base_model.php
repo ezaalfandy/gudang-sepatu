@@ -9,9 +9,14 @@
             return $this->db->get($table, $limit, $offset)->result();
         }
 
-        public function get_all_specific($table, $where, $limit = 0, $offset = 0)
+        public function get_all_or_like($table, $like, $limit = 0, $offset = 0)
         {
-            return $this->db->where($where)->get($table, $limit, $offset)->result();
+            return $this->db->or_like($like)->get($table, $limit, $offset)->result();
+        }
+
+        public function get_all_specific($table, $where, $order_by = null ,$limit = 0, $offset = 0)
+        {
+            return $this->db->where($where)->order_by($order_by)->get($table, $limit, $offset)->result();
         }
         
         public function insert($table, $array)
@@ -68,10 +73,14 @@
             }else
             {
                 return $last_row->$primary_key;
-            }
-                                    
-                            
+            }   
         }
+
+        public function count_all($table)
+        {
+            return $this->db->count_all($table);
+        }
+
     }
     
     /* End of file Base_model.php */
