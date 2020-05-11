@@ -12,10 +12,11 @@
             $this->load->module('base');
         }
         
+
         public function index()
         {
             if ($this->session->userdata('level') == 'asisten_manager_gudang') {
-                redirect('Asisten-manager-gudang');
+                redirect('asisten-manager-gudang');
             }else{
                 $this->load->view('account/login_admin');
             }
@@ -23,7 +24,7 @@
 
         public function management(){
             if ($this->session->userdata('level') == 'asisten_manager_gudang') {
-                redirect('Asisten-manager-gudang');
+                redirect('asisten-manager-gudang');
             }else{
                 $this->load->view('account/login_management');
             }
@@ -31,7 +32,7 @@
 
         public function login_management(){
             if ($this->Account_model->login_management() == "asisten_manager_gudang") {
-                redirect('Asisten-manager-gudang');
+                redirect('asisten-manager-gudang');
             }else {
                 $this->session->set_flashdata('message', 'Username Atau Password Salah !');
                 $this->load->view('account/login_management');
@@ -49,7 +50,7 @@
 
         public function logout(){
             $this->session->sess_destroy();
-            redirect('Account');
+            redirect('account');
         }
 
         public function ganti_password(){
@@ -59,6 +60,24 @@
                 }else {
                     echo json_encode(array('status' => false));
                 }
+            }else{
+                $this->load->view('Admin/Access_denied');
+            }
+        }
+
+        public function cek_password($password_to_check, $password_available){
+            if (password_verify($password_to_check, $password_available) == TRUE) 
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
+        
+        public function generate_password($password){
+            if ($this->session->userdata('id_admin') !== NULL) {
+                return password_hash($password , PASSWORD_BCRYPT, ['cost' => 10]);
             }else{
                 $this->load->view('Admin/Access_denied');
             }

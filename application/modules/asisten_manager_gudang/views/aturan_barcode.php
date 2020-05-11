@@ -84,16 +84,22 @@
                   <td><?= $v_merek->nama_merek?></td>
                   <td><?= $v_merek->kode_merek?></td>
                   <td>
-                    <button class="btn btn-danger btn-sm btn-block" onclick="deleteMerek(<?= $v_merek->id_merek?>)">
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openModalMerek(<?= $v_merek->id_merek?>)">
-                      <i class="material-icons">
-                        create
-                      </i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-danger btn-sm" onclick="deleteMerek(<?= $v_merek->id_merek?>)">
+                          <i class="material-icons">
+                            delete
+                          </i>
+                        </button>
+                      </div>
+                      <div class="col-md-6 px-1">
+                        <button class="btn btn-info btn-sm" onclick="openModalMerek(<?= $v_merek->id_merek?>)">
+                          <i class="material-icons">
+                            create
+                          </i>
+                        </button>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <?php endforeach;?>
@@ -279,7 +285,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 }
+        { "width": "17%", "targets": -1 }
       ],
       responsive: false
     });

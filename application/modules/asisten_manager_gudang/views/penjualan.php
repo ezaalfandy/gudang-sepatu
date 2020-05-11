@@ -1,32 +1,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <?php
-                if($this->session->flashdata('status') == 'success')
-                {
-                echo '
-                    <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Success - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
-                }elseif ($this->session->flashdata('status') == 'failed') {
-                echo '
-                    <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <i class="material-icons">close</i>
-                    </button>
-                    <span>
-                        <b> Failed - </b> '.$this->session->userdata('message').'</span>
-                    </div>
-                ';
-                }
-            ?>
-        </div>
-        <div class="col-md-12">
             <div class="card">
                 <div class="card-header card-header-info card-header-icon">
                     <div class="card-icon">
@@ -46,7 +20,6 @@
                                             <th>Jenis</th>
                                             <th>Item</th>
                                             <th>Tanggal</th>
-                                            <th>Aksi</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -58,17 +31,6 @@
                                                     <td><?= $v->jenis_transaksi?></td>
                                                     <td><?= $v->barang?></td>
                                                     <td><?= $v->tanggal_penjualan_formatted?></td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <button class="btn btn-danger btn-sm btn-block" onclick="deletePenjualan(<?= $v->id_penjualan?>)">
-                                                                    <i class="material-icons">
-                                                                        delete
-                                                                    </i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             <?php endforeach;?>
                                         </tbody>

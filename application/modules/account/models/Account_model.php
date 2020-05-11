@@ -23,6 +23,7 @@ class Account_model extends CI_Model {
 					'username' => $query->row('username'),
 					'nama' => $query->row('nama'),
 					'foto' => $query->row('foto'),
+					'password' => $query->row('password'),
 					'id_admin' => $query->row('id_admin_management')
 				);
 				$this->session->set_userdata( $array );
@@ -55,6 +56,7 @@ class Account_model extends CI_Model {
 					'nama' => $query->row('nama'),
 					'foto' => $query->row('foto'),
 					'id_admin' => $query->row('id_admin_gudang'),
+					'password' => $query->row('password'),
 					'id_gudang' => $query->row('id_gudang')
 				);
 				$this->session->set_userdata( $array );

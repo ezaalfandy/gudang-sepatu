@@ -85,7 +85,7 @@
                     </div>
                     <h4 class="card-title">Input penjualan</h4>
                 </div>
-                <form action="<?= base_url('Admin-gudang/insert-penjualan')?>" method="post" accept-charset="utf-8"
+                <form action="<?= base_url('admin-gudang/insert-penjualan')?>" method="post" accept-charset="utf-8"
                 novalidate="novalidate" id="formPenjualan" enctype="multipart/form-data">
                     <div class="card-body ">
                         <div class="row">

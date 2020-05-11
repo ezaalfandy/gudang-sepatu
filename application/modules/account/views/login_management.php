@@ -32,7 +32,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="post" action="<?= base_url('Account/login_management')?>">
+            <form class="form" method="post" action="<?= base_url('account/login_management')?>">
               <div class="card card-hidden card-login">
                 <div class="card-header card-header-rose text-center">
                   <h4 class="card-title">Welcome Leader !</h4>

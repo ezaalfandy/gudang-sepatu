@@ -51,14 +51,11 @@
 
         public function delete($table, $where)
         {
-            $this->db->where($where)->delete($table);
-            
-            if($this->db->affected_rows() > 0)
+            if($this->db->where($where)->delete($table) == true)
             {
                 return true;
-            }else
-            {
-                return false;
+            }else{
+                return $this->db->error();
             }
         }
 
@@ -81,6 +78,10 @@
             return $this->db->count_all($table);
         }
 
+        public function ganti_session($session){
+            $this->session->set_userdata( $session );
+            return true;
+        }
     }
     
     /* End of file Base_model.php */

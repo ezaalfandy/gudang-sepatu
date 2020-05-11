@@ -38,7 +38,7 @@
                 $data['main_view'] = 'page_missing';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -79,7 +79,7 @@
                 $data['main_view'] = 'dashboard';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -93,7 +93,7 @@
                 $data['main_view'] = 'stok_barang';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -163,7 +163,7 @@
                 }
                 
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -186,7 +186,7 @@
                 $data['main_view'] = 'search_result';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -202,7 +202,7 @@
                 $data['main_view'] = 'pre_order';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -224,7 +224,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -246,7 +246,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -270,7 +270,7 @@
                 redirect('admin-gudang/view-pre-order');
             }else
             {
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -285,7 +285,7 @@
                 $data['main_view'] = 'hand_over_keluar';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -300,7 +300,7 @@
                 $data['main_view'] = 'hand_over_masuk';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -328,7 +328,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -355,7 +355,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -379,7 +379,7 @@
                 redirect('admin-gudang/view-hand-over-masuk');
             }else
             {
-                redirect('Account');
+                redirect('account');
             }
         }      
 
@@ -390,7 +390,7 @@
                 $id_hand_over = $this->uri->segment(3);
                 $this->hand_over->cetak_hand_over(array('id_hand_over' => $id_hand_over));
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -405,7 +405,7 @@
                 $data['main_view'] = 'penjualan';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -423,7 +423,7 @@
                 $data['main_view'] = 'insert_penjualan';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 
@@ -483,7 +483,7 @@
                 $this->view_insert_penjualan();
             }else
             {
-                redirect('Account');
+                redirect('account');
             }
         }
         
@@ -507,7 +507,7 @@
                 redirect('admin-gudang/view-penjualan');
             }else
             {
-                redirect('Account');
+                redirect('account');
             }
         }   
 
@@ -531,7 +531,7 @@
                 redirect('admin-gudang/view-insert-penjualan');
             }else
             {
-                redirect('Account');
+                redirect('account');
             }
         }   
 
@@ -546,7 +546,7 @@
                 $data['main_view'] = 'kalender';
                 $this->load->view('template_admin_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account');
             }
         }
 

@@ -10,6 +10,7 @@
             parent::__construct();            
             $this->load->module('pre_order');
             $this->load->module('manajemen_stok');
+            $this->load->module('account');
             $this->load->module('hand_over');
             $this->load->module('image_manipulation');
             $this->load->module('grafik');
@@ -31,7 +32,7 @@
                 $data['main_view'] = 'page_missing';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -69,7 +70,7 @@
                 $data['main_view'] = 'dashboard';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -81,7 +82,7 @@
                 $data['main_view'] = 'gudang';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -134,7 +135,7 @@
                 }
                 
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -219,7 +220,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -227,7 +228,8 @@
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {
-                if($this->Base_model->delete('gudang', array('id_gudang' => $this->uri->segment(3))) == true)
+                $delete = $this->Base_model->delete('gudang', array('id_gudang' => $this->uri->segment(3)));
+                if($delete === true)
                 {
                     $array = array(
                         'status' => 'success',
@@ -236,14 +238,14 @@
                 }else{
                     $array = array(
                         'status' => 'failed',
-                        'message' => 'Gagal Hapus Data'
+                        'message' => $delete['message']
                     );
                 }
                 $this->session->set_flashdata($array);
                 redirect('asisten-manager-gudang/view-gudang');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -316,7 +318,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -328,7 +330,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }                   
 
@@ -342,7 +344,7 @@
                 $data['main_view'] = 'aturan_barcode';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
                       
@@ -390,7 +392,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -414,7 +416,7 @@
                 redirect('asisten-manager-gudang/view-aturan-barcode');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -463,7 +465,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -475,7 +477,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                             
@@ -524,7 +526,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -548,7 +550,7 @@
                 redirect('asisten-manager-gudang/view-aturan-barcode');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -597,7 +599,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -609,7 +611,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }          
 
@@ -629,7 +631,7 @@
                 $data['main_view'] = 'search_result';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -643,7 +645,7 @@
                 $data['main_view'] = 'barang';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -711,7 +713,7 @@
                 }
                 
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -858,15 +860,16 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
         public function delete_barang()
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
-            {
-                if($this->Base_model->delete('barang', array('id_barang' => $this->uri->segment(3)) ) == true)
+            {   
+                $delete = $this->Base_model->delete('barang', array('id_barang' => $this->uri->segment(3)) );
+                if($delete === true)
                 {
                     $array = array(
                         'status' => 'success',
@@ -875,14 +878,14 @@
                 }else{
                     $array = array(
                         'status' => 'failed',
-                        'message' => 'Gagal Hapus Data'
+                        'message' => $delete['message']
                     );
                 }
                 $this->session->set_flashdata($array);
                 redirect('asisten-manager-gudang/view-barang');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -953,7 +956,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -965,7 +968,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }     
 
@@ -981,7 +984,7 @@
                 echo $this->manajemen_stok->get_all_specific_stok_barang($where, TRUE);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -993,7 +996,7 @@
                 $data['main_view'] = 'supplier';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1021,7 +1024,7 @@
                 }
                 
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1082,7 +1085,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                                 
@@ -1090,7 +1093,8 @@
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {
-                if($this->Base_model->delete('supplier', array('id_supplier' => $this->uri->segment(3)) ) == true)
+                $delete = $this->Base_model->delete('supplier', array('id_supplier' => $this->uri->segment(3)) );
+                if($delete === true)
                 {
                     $array = array(
                         'status' => 'success',
@@ -1099,14 +1103,14 @@
                 }else{
                     $array = array(
                         'status' => 'failed',
-                        'message' => 'Gagal Hapus Data'
+                        'message' => $delete['message']
                     );
                 }
                 $this->session->set_flashdata($array);
                 redirect('asisten-manager-gudang/view-supplier');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                                 
@@ -1168,7 +1172,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                                 
@@ -1180,7 +1184,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1195,7 +1199,7 @@
                 $data['main_view'] = 'pre_order';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1210,7 +1214,7 @@
                 $data['main_view'] = 'insert_pre_order';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1228,7 +1232,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1256,7 +1260,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1280,7 +1284,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1290,7 +1294,7 @@
             {
                 $this->pre_order->cetak_pre_order($this->uri->segment(3));
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1300,7 +1304,7 @@
             {
                 $this->pre_order->cetak_barcode_pre_order($this->uri->segment(3));
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -1382,7 +1386,7 @@
                 $this->view_insert_pre_order();
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -1406,7 +1410,7 @@
                 redirect('asisten-manager-gudang/view-pre-order');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }   
                         
@@ -1504,7 +1508,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1578,7 +1582,7 @@
                 $this->view_edit_pre_order($data['data_pre_order']->kode_pre_order);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1611,7 +1615,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1639,7 +1643,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1666,7 +1670,7 @@
                     $this->page_missing();
                 }
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1678,7 +1682,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                             
@@ -1693,7 +1697,7 @@
                 $data['main_view'] = 'hand_over';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1708,7 +1712,7 @@
                 $data['main_view'] = 'insert_hand_over';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1719,7 +1723,7 @@
                 $id_hand_over = $this->uri->segment(3);
                 $this->hand_over->cetak_hand_over(array('id_hand_over' => $id_hand_over));
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -1789,7 +1793,7 @@
                 }
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
                               
@@ -1814,7 +1818,7 @@
                 redirect('asisten-manager-gudang/view-hand-over');
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
         
@@ -1886,7 +1890,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1969,7 +1973,7 @@
                 
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -1981,7 +1985,7 @@
                 echo json_encode($result);
             }else
             {
-                redirect('Account');
+                redirect('account/management');
             }
         }                                           
                             
@@ -1994,7 +1998,7 @@
                 $data['main_view'] = 'kalender';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
             }
         }
 
@@ -2007,7 +2011,77 @@
                 $data['main_view'] = 'penjualan';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
-                redirect('Account');
+                redirect('account/management');
+            }
+        }
+
+        public function view_edit_profile()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {   
+                $data['data_profile'] = $this->Base_model->get_specific('admin_management', array(
+                    'id_admin_management', 
+                    $this->session->userdata('id_admin')
+                ));
+
+                $data['main_view'] = 'edit_profile';
+                $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+            }else{
+                redirect('account/management');
+            }
+        }
+
+        public function edit_profile()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {   
+                $old_password = $this->input->post('password_lama');
+                $password = $this->input->post('edit_password');
+                $retype_password = $this->input->post('edit_retype_password');
+
+                if(
+                    $this->account->cek_password($old_password, $this->session->userdata('password')) == FALSE ||
+                    $password !== $retype_password
+                ){
+                    $array = array(
+                        'status' => 'failed',
+                        'message' => 'password tidak sesuai'
+                    );
+                    $this->session->set_flashdata($array);
+                    $this->view_edit_profile();
+                }else
+                {
+                    $nama = $this->input->post('edit_nama');
+                    $username = $this->input->post('edit_username');
+
+                    $where = array(
+                        "id_admin_management" => $this->session->userdata('id_admin')
+                    );
+
+                    $data = array(
+                        'nama' => $nama,
+                        'username' => $username
+                    );
+
+                    if(strlen($password) !== 0){
+                        $hash = $this->account->generate_password($password);
+                        $data['password'] = $hash;
+                    }
+
+                    $this->Base_model->edit('admin_management', $where, $data);
+
+                    $this->Base_model->ganti_session($data);
+
+                    $array = array(
+                        'status' => 'success',
+                        'message' => 'Edit profile berhasil'
+                    );
+                    $this->session->set_flashdata($array);
+                    redirect('asisten-manager-gudang/view-edit-profile');
+                    
+                }
+            }else{
+                redirect('account/management');
             }
         }
 

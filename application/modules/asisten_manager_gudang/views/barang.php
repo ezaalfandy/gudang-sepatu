@@ -35,7 +35,7 @@
           </div>
           <h4 class="card-title">Tambah Barang</h4>
         </div>
-        <form action="<?= base_url('Asisten-manager-gudang/insert-barang')?>" method="post" accept-charset="utf-8"
+        <form action="<?= base_url('asisten-manager-gudang/insert-barang')?>" method="post" accept-charset="utf-8"
           novalidate="novalidate" id="formTambahBarang" enctype="multipart/form-data">
           <div class="card-body ">
 
@@ -172,7 +172,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form novalidate="novalidate" id="formEditBarang"
-        action="<?= base_url('Asisten-manager-gudang/edit-barang')?>" method="post" accept-charset="utf-8">
+        action="<?= base_url('asisten-manager-gudang/edit-barang')?>" method="post" accept-charset="utf-8">
         <div class="modal-header">
           <h5 class="modal-title">Edit Barang</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -213,8 +213,8 @@
           
         </div>
         <div class="modal-footer">
-          <input type="reset" value="Reset" class="btn btn-outline-primary" />
           <input type="submit" value="Submit" class="btn btn-primary" />
+          <input type="button" value="Cancel" class="btn btn-outline-primary" data-dismiss="modal"/>
         </div>
       </form>
     </div>
@@ -264,7 +264,7 @@
     }).then(function(result) {
         if(result.value === true)
         {
-          window.location.href = "<?= base_url('Asisten-manager-gudang/delete-barang/')?>"+ $id_barang;
+          window.location.href = "<?= base_url('asisten-manager-gudang/delete-barang/')?>"+ $id_barang;
         }
     })
   }
@@ -277,7 +277,7 @@
         [10, 25, 50, "All"]
       ],
       "columnDefs": [
-        { "width": "10%", "targets": -1 }
+        { "width": "15%", "targets": -1 }
       ],
       responsive: false
     });
@@ -300,7 +300,7 @@
 
   function openModalEditBarang($id_barang)
         {
-      $.getJSON("<?= base_url('Asisten-manager-gudang/get-specific-barang/')?>"+$id_barang,
+      $.getJSON("<?= base_url('asisten-manager-gudang/get-specific-barang/')?>"+$id_barang,
         function (data, textStatus, jqXHR) {
           $('#formEditBarang .form-group').addClass('is-filled');
           $('#formEditBarang [name="edit_id_barang"]').val(data.id_barang);

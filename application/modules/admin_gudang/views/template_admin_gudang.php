@@ -97,12 +97,6 @@
               <p> Dashboard </p>
             </a>
           </li>
-          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('admin-gudang/view-kalender')?>">
-              <i class="material-icons">date_range</i>
-              <p> Kalender </p>
-            </a>
-          </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-stok-barang'){echo 'active';}?>">
             <a class="nav-link" href="<?= base_url('admin-gudang/view-stok-barang')?>">
               <i class="material-icons">assessment</i>
@@ -162,6 +156,12 @@
                 </li>
               </ul>
             </div>
+          </li>
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('admin-gudang/view-kalender')?>">
+              <i class="material-icons">date_range</i>
+              <p> Kalender </p>
+            </a>
           </li>
         </ul>
       </div>
@@ -236,7 +236,7 @@
                   <a class="dropdown-item" href="#">Profile</a>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?= base_url('Account/logout')?>">Log out</a>
+                  <a class="dropdown-item" href="<?= base_url('account/logout')?>">Log out</a>
                 </div>
               </li>
             </ul>

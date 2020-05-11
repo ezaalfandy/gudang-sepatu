@@ -237,7 +237,7 @@
                     $('.rincian_barang_container').empty();
 
                     //MENGAMBIL DATA BARANG YANG VALID BERDASARKAN GUDANG ASAL YANG DIPILIH
-                    $.getJSON("<?= base_url('Asisten-manager-gudang/get-all-specific-stok-barang/')?>"+suggestion.code,
+                    $.getJSON("<?= base_url('asisten-manager-gudang/get-all-specific-stok-barang/')?>"+suggestion.code,
                         function (data, textStatus, jqXHR) {
 
                             $cloned_element.appendTo(".rincian_barang_container");

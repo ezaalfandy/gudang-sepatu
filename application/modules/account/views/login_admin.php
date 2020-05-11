@@ -32,7 +32,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="post" action="<?= base_url('Account/login-admin-gudang')?>">
+            <form class="form" method="post" action="<?= base_url('account/login-admin-gudang')?>">
               <div class="card card-hidden card-login">
                 <div class="card-header card-header-info text-center">
                   <h4 class="card-title">Welcome Team !</h4>

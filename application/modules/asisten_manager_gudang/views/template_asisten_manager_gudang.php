@@ -75,7 +75,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-edit-profile')?>">
                     <span class="sidebar-mini"> EP </span>
                     <span class="sidebar-normal"> Edit Profile </span>
                   </a>
@@ -95,12 +95,6 @@
             <a class="nav-link" href="<?= base_url('asisten-manager-gudang/dashboard')?>">
               <i class="material-icons">dashboard</i>
               <p> Dashboard </p>
-            </a>
-          </li>
-          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
-            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-kalender')?>">
-              <i class="material-icons">date_range</i>
-              <p> Kalender </p>
             </a>
           </li>
           <li class="nav-item <?php if($this->uri->segment(2) == 'view-gudang'){echo 'active';}?>">
@@ -151,10 +145,16 @@
               <p>Hand Over</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link <?php if($this->uri->segment(2) == 'view-penjualan'){echo 'active';}?>" href="<?= base_url('asisten-manager-gudang/view-penjualan')?>">
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-penjualan'){echo 'active';}?>">
+            <a class="nav-link"  href="<?= base_url('asisten-manager-gudang/view-penjualan')?>">
               <i class="material-icons">shopping_cart</i>
               <p> Penjualan</p>
+            </a>
+          </li>
+          <li class="nav-item <?php if($this->uri->segment(2) == 'view-kalender'){echo 'active';}?>">
+            <a class="nav-link" href="<?= base_url('asisten-manager-gudang/view-kalender')?>">
+              <i class="material-icons">date_range</i>
+              <p> Kalender </p>
             </a>
           </li>
         </ul>
@@ -202,7 +202,7 @@
                   <a class="dropdown-item" href="#">Profile</a>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?= base_url('Account/logout')?>">Log out</a>
+                  <a class="dropdown-item" href="<?= base_url('account/logout')?>">Log out</a>
                 </div>
               </li>
             </ul>
