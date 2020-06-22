@@ -43,7 +43,6 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Kode</th>
-                                            <th>Jenis</th>
                                             <th>Item</th>
                                             <th></th>
                                         </tr>
@@ -54,7 +53,6 @@
                                                 <tr>
                                                     <td scope="row"><?= $n++?></td>
                                                     <td><?= $v->kode_order?></td>
-                                                    <td><?= $v->jenis_transaksi?></td>
                                                     <td><?= $v->barang?></td>
                                                     <td>
                                                         <div class="row">
@@ -90,24 +88,10 @@
                     <div class="card-body ">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="insert_penjualan_jenis_transaksi">Jenis Transaksi</label>
-                                    <select name="insert_jenis_transaksi" class="selectpicker form-control" data-style="btn btn-primary" data-size="4" title="Single Select" id="insert_penjualan_jenis_transaksi">
-                                        <option value="lazada" selected>Lazada</option>
-                                        <option value="shopee">Shopee</option>
-                                        <option value="tokopedia">Tokopedia</option>
-                                        <option value="bukalapak">Bukalapak</option>
-                                        <option value="blibli">Blibli</option>
-                                        <option value="social_media">FB / WA / IG</option>
-                                        <option value="offline">Offline / pembelian langsung</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
                                 <div class="form-group mt-4">
                                     <label for="insert_penjualan_kode_order">Kode Order</label>
                                     <input type="text" name="insert_kode_order" value="<?php echo set_value('merek'); ?>" id="insert_penjualan_kode_order"
-                                    class="form-control"/>
+                                    class="form-control" required="true"/>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -151,8 +135,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-fill btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-default btn-link">Reset</button>
+                        <button type="submit" class="btn btn-fill btn-primary">Tambah</button>
                     </div>
                 </form>
             </div>
@@ -203,15 +186,9 @@
             responsive: false
         });
         
-        $('#insert_penjualan_jenis_transaksi').focus();
+        $('#insert_penjualan_kode_order').focus();
         setAutoCompleteBarang('[name="autocomplete_insert_id_barang[0]"]', $barang);
 
-        $('#insert_penjualan_jenis_transaksi').on('change', function (e, clickedIndex, isSelected, previousValue) { 
-            setTimeout(function(){
-                $('#insert_penjualan_kode_order').focus();
-            }, 300);
-        });
-           
         $('#formPenjualan').on('click', '.remove_rincian_barang', function()
             {
                 if($('.detail-item').length > 1)
@@ -281,6 +258,10 @@
 
                 if(suggestion.max == 0){
                     swal('Stok Barang Habis');
+                    //MENSET INPUT ID KE NOL KARENA STOK HABIS
+                    $($element).val(null)
+                    $hidden_input = $($element).siblings('[type="hidden"]');
+                    $hidden_input.val(null);
                 }
             },
             autoSelectFirst: true

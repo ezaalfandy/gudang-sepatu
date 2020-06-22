@@ -139,7 +139,7 @@
                 <?php foreach ($data_barang_akan_habis as $k => $v):?>
                   <tr>
                     <td><?= $n++?></td>
-                    <td><?= $v->kode_barang?></td>
+                    <td><a href="<?= base_url('view-detail-barang/').$v->kode_barang?>"><u><?= $v->kode_barang?></a></u></td>
                     <td>
                         <?= $v->kode_gudang.', '.$v->kabupaten_kota.' '.$v->provinsi.' ('.$v->nomor_telepon.')'?>
                     </td>

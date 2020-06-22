@@ -29,39 +29,16 @@
         }
         
         public function insert_penjualan($id_gudang){
-            $jenis_transaksi = $this->input->post('insert_jenis_transaksi', TRUE);
             $array_model = array(
                 'id_admin' => $this->session->userdata('id_admin'),
                 'id_gudang' => $id_gudang,
-                'kode_order' => $this->input->post('insert_kode_order', TRUE),
-                'jenis_transaksi' => $this->input->post('insert_jenis_transaksi', TRUE)
+                'kode_order' => $this->input->post('insert_kode_order', TRUE)
             );
 
             $id_penjualan = $this->Base_model->insert('penjualan', $array_model);
 
             if($id_penjualan !== FALSE)
             {
-                if($jenis_transaksi == 'social_media')
-                {
-                    $kode_order = 'SC'.sprintf('%05d', $id_penjualan).$kode_gudang;
-
-                    if($this->Base_model->edit('penjualan', array('id_penjualan' => $id_penjualan), array('kode_order' => $kode_order)) === FALSE)
-                    {
-                        return FALSE;
-                    }
-                }elseif($jenis_transaksi == 'offline')
-                {
-                    $kode_order = 'OF'.sprintf('%05d', $id_penjualan).$kode_gudang;
-
-                    if($this->Base_model->edit('penjualan', array('id_penjualan' => $id_penjualan), array('kode_order' => $kode_order)) === FALSE)
-                    {
-                        return FALSE;
-                    }
-                }else
-                {
-                    return $id_penjualan;
-                }
-
                 return $id_penjualan;
             }else{
                 return FALSE;

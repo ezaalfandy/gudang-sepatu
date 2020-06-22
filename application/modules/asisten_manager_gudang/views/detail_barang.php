@@ -86,6 +86,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#modalCetakBarcode">Cetak barcode</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,9 +219,36 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="modalCetakBarcode" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= base_url('asisten-manager-gudang/cetak-barcode-by-kode-barang/')?>" method="get" target="_blank" role="form" novalidate="novalidate" id="formCetakBarcode" class="m-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cetak Barcode</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" name="kode_barang" value="<?= $data_barang->kode_barang?>"/>
+                        <label for="insert_jumlah_barcode">Jumlah Barcode</label>
+                        <input type="number" name="jumlah_barcode" value=" " id="insert_jumlah_barcode"
+                            class="form-control" required="true" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="Submit" class="btn btn-primary">Print</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
+        
+        md.setFormValidation($('#formCetakBarcode'));
         var tableBarang = $('#tableBarang').DataTable({
             "pagingType": "full_numbers",
             "lengthMenu": [

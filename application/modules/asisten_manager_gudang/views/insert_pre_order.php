@@ -192,13 +192,13 @@
       );
     }
 
-    $barang_lookup = [];
-    foreach ($data_barang as $k => $v) {
-      $barang_lookup[] = array(
-        "value" => $v->merek.'  '.$v->tipe.'  '.$v->warna.'  '.$v->ukuran.' ('.$v->kode_barang.')',
-        "code" => $v->id_barang
-      );
-    }
+    // $barang_lookup = [];
+    // foreach ($data_barang as $k => $v) {
+    //   $barang_lookup[] = array(
+    //     "value" => $v->merek.'  '.$v->tipe.'  '.$v->warna.'  '.$v->ukuran.' ('.$v->kode_barang.')',
+    //     "code" => $v->id_barang
+    //   );
+    // }
 
   ?>
 
@@ -219,13 +219,12 @@
 
     $cloned_element.find('[name="autocomplete_insert_id_barang['+$element_index+']"]').focus();    
 
-    md.setInputAutoComplete($cloned_element.find('[name="autocomplete_insert_id_barang['+$element_index+']"]'), $barang);
+    md.setInputAutoCompleteAjax($cloned_element.find('[name="autocomplete_insert_id_barang['+$element_index+']"]'), '<?= base_url('asisten-manager-gudang/get-ajax-lookup-barang')?>');
   }
   
 
   $gudang = JSON.parse('<?= json_encode($gudang_lookup);?>');
   $supplier = JSON.parse('<?= json_encode($supplier_lookup);?>');
-  $barang = JSON.parse('<?= json_encode($barang_lookup);?>');
   
   $(document).ready(function () {
     md.initMaterialWizard('#wizardPreOrder', $('#formInsertPreOrder').validate());
@@ -241,7 +240,7 @@
     
     md.setInputAutoComplete('#autocomplete_insert_pre_order_id_gudang_tujuan', $gudang);
     md.setInputAutoComplete('#autocomplete_insert_pre_order_id_supplier', $supplier);
-    md.setInputAutoComplete('[name="autocomplete_insert_id_barang[0]"]', $barang);
+    md.setInputAutoCompleteAjax('[name="autocomplete_insert_id_barang[0]"]', '<?= base_url('asisten-manager-gudang/get-ajax-lookup-barang')?>');
 
   });
 

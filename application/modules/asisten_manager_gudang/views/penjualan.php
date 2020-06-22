@@ -17,7 +17,6 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Kode</th>
-                                            <th>Jenis</th>
                                             <th>Item</th>
                                             <th>Tanggal</th>
                                         </tr>
@@ -28,7 +27,6 @@
                                                 <tr>
                                                     <td scope="row"><?= $n++?></td>
                                                     <td><?= $v->kode_order?></td>
-                                                    <td><?= $v->jenis_transaksi?></td>
                                                     <td><?= $v->barang?></td>
                                                     <td><?= $v->tanggal_penjualan_formatted?></td>
                                                 </tr>

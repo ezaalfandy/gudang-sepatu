@@ -1211,7 +1211,7 @@
                 $data['data_gudang'] = $this->Base_model->get_all('gudang');
                 $data['data_supplier'] = $this->Base_model->get_all('supplier');
                 $data['data_barang'] = $this->Base_model->get_all('barang');
-                $data['main_view'] = 'insert_pre_order';
+                $data['main_view'] = 'pre_order/insert_pre_order_per_seri';
                 $this->load->view('template_asisten_manager_gudang', $data, FALSE);
             }else{
                 redirect('account/management');
@@ -1236,23 +1236,31 @@
             }
         }
 
-        public function view_edit_pre_order($kode_pre_order = null)
+        public function view_edit_pre_order($kode_pre_order = null, $mode_satuan =  FALSE)
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {
-                $kode_pre_order = ($this->uri->segment(3) == null) ? $kode_pre_order : $this->uri->segment(3);
-                $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('kode_pre_order' => $kode_pre_order));
-
-                if($data['data_pre_order'] !== null)
+                if($kode_pre_order !== null)
                 {   
+                    $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('kode_pre_order' => $kode_pre_order));
                     if($data['data_pre_order']->status_pre_order == 'diterima'){
                         $this->page_missing();
                     }else{
                         $data['data_gudang'] = $this->Base_model->get_all('gudang');
                         $data['data_supplier'] = $this->Base_model->get_all('supplier');
-                        $data['data_barang'] = $this->Base_model->get_all('barang');
-                        $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
-                        $data['main_view'] = 'edit_pre_order';
+
+                        $detail_pre_order = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
+                        $seri = konversi_ke_mode_seri($detail_pre_order);
+
+                        if($mode_satuan == 'mode-satuan' || $seri === FALSE)
+                        {
+                            //Rincian barang tidak lengkap, akan ditampilkan dalam mode satuan
+                            $data['data_detail_pre_order'] = $detail_pre_order;
+                            $data['main_view'] = 'pre_order/edit_pre_order';
+                        }else{
+                            $data['seri'] = $seri;
+                            $data['main_view'] = 'pre_order/edit_pre_order_per_seri';
+                        }
                         $this->load->view('template_asisten_manager_gudang', $data, FALSE);
                     }
                 }else
@@ -1264,7 +1272,7 @@
             }
         }
 
-        public function view_terima_pre_order($kode_pre_order = null)
+        public function view_terima_pre_order($kode_pre_order = null, $mode_satuan =  FALSE)
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {
@@ -1275,10 +1283,21 @@
                 {
                     $data['data_gudang'] = $this->Base_model->get_all('gudang');
                     $data['data_supplier'] = $this->Base_model->get_all('supplier');
-                    $data['data_barang'] = $this->Base_model->get_all('barang');
-                    $data['data_detail_pre_order'] = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
-                    $data['main_view'] = 'terima_pre_order';
+
+                    $detail_pre_order = $this->pre_order->get_all_specific_detail_pre_order(array('id_pre_order' => $data['data_pre_order']->id_pre_order));
+                    $seri = konversi_ke_mode_seri($detail_pre_order);
+
+                    // if($mode_satuan == 'mode-satuan' || $seri === FALSE)
+                    // {
+                        //Rincian barang tidak lengkap, akan ditampilkan dalam mode satuan
+                        $data['data_detail_pre_order'] = $detail_pre_order;
+                        $data['main_view'] = 'pre_order/terima_pre_order';
+                    // }else{
+                    //     $data['seri'] = $seri;
+                    //     $data['main_view'] = 'pre_order/terima_pre_order_per_seri';
+                    // }
                     $this->load->view('template_asisten_manager_gudang', $data, FALSE);
+
                 }else
                 {
                     $this->page_missing();
@@ -1307,12 +1326,39 @@
                 redirect('account/management');
             }
         }
-                              
-        public function insert_pre_order()
+
+        public function cetak_barcode_by_kode_barang()
+        {
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                $data['kode_barang'] = $this->input->get('kode_barang');
+                $data['jumlah_barcode'] = $this->input->get('jumlah_barcode');
+                $this->load->view('cetak_barcode_by_kode_barang', $data);
+            }else{
+                redirect('account/management');
+            }
+        }
+        
+        public function get_ajax_lookup_barang($uri_segment_3 = FALSE){
+            if($this->session->userdata('level') == 'asisten_manager_gudang')
+            {
+                if($uri_segment_3 == 'per_ukuran')
+                {
+                    $result =  $this->Base_model->get_ajax_lookup_barang($this->input->get('query', TRUE));
+                }else
+                {
+                    $result =  $this->Base_model->get_ajax_lookup_barang($this->input->get('query', TRUE), array("tipe", "warna"));
+                }
+                echo json_encode($result);
+            }else{
+                redirect('account/management');
+            }
+        }
+
+        public function insert_pre_order($mode_satuan = FALSE)
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {   
-                
                 $config = array(
                     array(
                         'field' => 'insert_id_supplier',
@@ -1343,7 +1389,8 @@
 
                     if($id_pre_order !== false)
                     {
-                        if($this->pre_order->insert_detail_pre_order($id_pre_order) == true)
+                        $method = ($mode_satuan == FALSE) ? 'insert_detail_pre_order_per_seri' : 'insert_detail_pre_order';
+                        if($this->pre_order->$method($id_pre_order) == true)
                         {
                             $array = array(
                                 'status' => 'success',
@@ -1382,6 +1429,7 @@
                         'message' => validation_errors(' ', '')
                     );
                 }
+                
                 $this->session->set_flashdata($array);
                 $this->view_insert_pre_order();
             }else
@@ -1512,7 +1560,7 @@
             }
         }
 
-        public function edit_pre_order()
+        public function edit_pre_order($mode_satuan = FALSE)
         {
             if($this->session->userdata('level') == 'asisten_manager_gudang')
             {   
@@ -1548,8 +1596,11 @@
                     $data['data_pre_order'] = $this->pre_order->get_specific_pre_order(array('id_pre_order' => $id_pre_order));
 
                     if($edit_pre_order !== false)
-                    {
-                        if($this->pre_order->edit_detail_pre_order($id_pre_order) == true)
+                    {   
+                        
+                        $method = ($mode_satuan === FALSE ) ? 'edit_detail_pre_order_per_seri' : 'edit_detail_pre_order';
+                
+                        if($this->pre_order->$method($id_pre_order) == true)
                         {
                             $array = array(
                                 'status' => 'success',
@@ -1570,16 +1621,19 @@
                             'message' => 'Gagal Edit Data Pre Order 1'
                         );
                     }
+                    
+                    $this->session->set_flashdata($array);
+                    redirect('asisten-manager-gudang/view-edit-pre-order/'.$data['data_pre_order']->kode_pre_order,'refresh');
                 }else{
                     //Validasi gagal
                     $array = array(
                         'status' => 'failed',
                         'message' => validation_errors(' ', '')
                     );
+                    
+                    $this->session->set_flashdata($array);
+                    $this->view_edit_pre_order($data['data_pre_order']->kode_pre_order, 'mode_satuan');
                 }
-                
-                $this->session->set_flashdata($array);
-                $this->view_edit_pre_order($data['data_pre_order']->kode_pre_order);
             }else
             {
                 redirect('account/management');
@@ -2082,6 +2136,157 @@
                 }
             }else{
                 redirect('account/management');
+            }
+        }
+
+        public function import_excel_barang(){
+            
+            if ($this->session->userdata('level') == "asisten_manager_gudang") {
+                ini_set('max_execution_time', 3000); 
+
+                $config['upload_path'] = './temp/';
+                $config['allowed_types'] = 'xlsx|csv|xls';
+                $config['max_size']  = '4000';
+                
+                $this->load->library('upload', $config);
+                
+                if ( ! $this->upload->do_upload('file_excel')){
+                    
+                    $array = array(
+                        "status" => 'failed',
+                        "message" => $this->upload->display_errors(' ', ' ')
+                    );
+                    $this->session->set_flashdata($array);
+                    redirect('asisten-manager-gudang/view-barang');
+                }else{
+                    $upload = $this->upload->data();
+                    $file = './temp/'.$upload['file_name'];
+                    
+                    //load the excel library
+                    $this->load->library('excel');
+
+                    $inputFileType = PHPExcel_IOFactory::identify($file);
+                    $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                    $objReader->setReadDataOnly(true);
+                    $objPHPExcel = $objReader->load($file);
+                    $sheet = $objPHPExcel->getActiveSheet();
+                    $maxCell = $sheet->getHighestRowAndColumn();
+                    $data_from_excel = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row'], null, true, false, false);
+
+                    //REMOVE BLANK ROW AND COLUMN
+                    foreach ($data_from_excel as $key => $value) {
+                        if(!isset($value[0])){
+                            unset($data_from_excel[$key]);
+                        }else{
+                            foreach ($value as $k => $v) {
+                                if($k > 12 && !isset($v)){
+                                    unset($data_from_excel[$key][$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    //MENGHILANGKAN HEADER TABLE
+                    array_shift($data_from_excel);
+
+                    $warna = $this->Base_model->get_all('warna');
+                    $merek = $this->Base_model->get_all('merek');
+                    $barang = [];
+
+                    foreach ($warna as $key => $value) {
+                        $array_warna[$value->kode_warna] = $value->nama_warna;
+                    }
+                    $warna = $array_warna;
+
+                    foreach ($merek as $key => $value) {
+                        $array_merek[$value->kode_merek] = $value->nama_merek;
+                    }
+                    $merek = $array_merek;
+
+                    $status_pengecekan = true;
+                    $message = []; //UNTUK REPORT ERROR
+                    
+                    foreach ($data_from_excel as $key => $value) {
+                        $kolom_kode_merek = $data_from_excel[$key][0];
+                        $kolom_kode_tipe = $data_from_excel[$key][1];
+                        $kolom_kode_warna = $data_from_excel[$key][2];
+                        $kolom_ukuran = $data_from_excel[$key][3];
+
+                        //VALIDASI MEREK
+                        if(array_key_exists($kolom_kode_merek, $merek) == FALSE){
+                            $message[] = "Merek TIDAK VALID Baris ".($key+2)." (".$kolom_kode_merek.")<br>";
+                            $status_pengecekan = false;
+                        }
+                        
+                        //VALIDASI WARNA
+                        if(array_key_exists($kolom_kode_warna, $warna) == FALSE){
+                            $message[] = "Warna TIDAK VALID Baris ".($key+2)." (".$kolom_kode_warna.")<br>";
+                            $status_pengecekan = false;
+                        }
+
+                        $barang[] = array(
+                            "kode_barang" => $kolom_kode_merek.$kolom_kode_tipe.$kolom_kode_warna.$kolom_ukuran,
+                            "merek" => (array_key_exists($kolom_kode_merek, $merek)? $merek[$kolom_kode_merek] : ''),
+                            "tipe" => $kolom_kode_tipe,
+                            "warna" => (array_key_exists($kolom_kode_warna, $warna)? $warna[$kolom_kode_warna] : ''),
+                            "ukuran" => $kolom_ukuran
+                        );
+                    }
+                    
+                    if($status_pengecekan == true){
+                        //LOLOS VALIDASI LALU MELAKUKAN INPUT BARANG
+                        foreach ($barang as $k => $v) {
+                            $array_model = array(
+                                'kode_barang' => $v['kode_barang'],
+                                'merek' => $v['merek'],
+                                'tipe' => $v['tipe'],
+                                'warna' => $v['warna'],
+                                'ukuran' => $v['ukuran'],
+                                'alarm_stok_minimal' => 10,
+                                'stok_tersedia' => 0
+                            );
+
+                            $id_barang = $this->Base_model->insert('barang', $array_model);
+                            if($id_barang !== FALSE)
+                            {   
+                                if($this->manajemen_stok->create_specific_stok_barang_to_all_gudang($id_barang) == FALSE)
+                                {
+                                    $array = array(
+                                        'status' => 'failed',
+                                        'message' => 'Gagal Input Data (function create_specific_stok_barang_to_all_gudang)'
+                                    );
+                                    break;
+                                }else
+                                {
+                                    $array = array(
+                                        'status' => 'success',
+                                        'message' => 'Berhasil import data barang'
+                                    );
+                                }
+
+                            }else{
+                                $array = array(
+                                    'status' => 'failed',
+                                    'message' => 'Gagal Input Data'
+                                );
+                            }
+                        }
+                        $this->session->set_flashdata($array);
+                        redirect('asisten-manager-gudang/view-barang');
+                    }else{
+                        $array_session = array(
+                            "status" => 'failed',
+                            "message" => implode('<br>', $message)
+                        );
+                        $this->session->set_flashdata($array_session);
+                        redirect('asisten-manager-gudang/view-barang');
+                    }
+                    
+                    unlink('./temp/'.$upload['file_name']);
+                }
+            }else{
+                $this->output->set_status_header('403');
+                echo json_encode(array('status' => false, "message" => 'Access Denied'));
             }
         }
 

@@ -77,8 +77,7 @@
                     
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-fill btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-default btn-link">Reset</button>
+                        <button type="submit" class="btn btn-fill btn-primary">Ubah Password</button>
                     </div>
                 </form>
             </div>

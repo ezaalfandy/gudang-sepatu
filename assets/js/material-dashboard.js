@@ -348,11 +348,32 @@ md = {
       }
     });
   },
+  
+  setInputAutoCompleteAjax: function($element, $lookup){
+
+    $($element).autocomplete({
+        serviceUrl: $lookup,
+        onSelect: function (suggestion) {
+          $hidden_input = $($element).siblings('[type="hidden"]');
+
+          $hidden_input.val(suggestion.data);
+        },
+        deferRequestBy: 700,
+        autoSelectFirst: true,
+        onInvalidateSelection: function(){
+          $($element).val(null);
+          $hidden_input = $($element).siblings('[type="hidden"]');
+          $hidden_input.val(null);
+        }
+    });
+  
+  },
 
   setInputAutoComplete: function($element, $lookup){
 
     $($element).autocomplete({
         lookup: $lookup,
+        lookupLimit: 10,
         onSelect: function (suggestion) {
           $hidden_input = $($element).siblings('[type="hidden"]');
 

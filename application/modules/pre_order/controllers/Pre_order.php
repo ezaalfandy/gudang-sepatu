@@ -115,6 +115,48 @@ class Pre_order extends MY_Controller {
        
 
     }
+
+    public function insert_detail_pre_order_per_seri($id_pre_order){
+
+        $id_gudang = $this->input->post('insert_id_gudang_tujuan', TRUE);
+        
+        $all_barang = $this->input->post('insert_id_barang[]');
+        $jumlah = $this->input->post('insert_jumlah_barang[]');
+        
+
+        for ($i=0; $i < count($all_barang); $i++) {
+
+            $specific_barang = explode('-', $all_barang[$i]);
+            $where = array(
+                'merek' => $specific_barang[0],
+                'tipe' => $specific_barang[1],
+                'warna' => $specific_barang[2]
+            );
+
+            $array_barang_sejenis = $this->Base_model->get_all_specific('barang', $where);
+
+            foreach ($array_barang_sejenis as $key => $value) {
+                
+                $array_model = array(
+                    'id_pre_order' => $id_pre_order,
+                    'id_barang' => $value->id_barang,
+                    'jumlah' => 4 * $jumlah[$i],
+                    'satuan' => 'pasang',
+                    'harga_per_satuan' => 0
+                );
+                
+                if($this->Base_model->insert('detail_pre_order', $array_model) === false)
+                {
+                    return false;
+                }
+            }
+        }
+
+        //MENGINPUT TOTAL HARGA
+        $total_harga = $this->hitung_total_harga($id_pre_order);
+        $this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), array('total_harga' => $total_harga));
+        return true;
+    }
     
     public function edit_pre_order($id_pre_order){
     
@@ -168,6 +210,61 @@ class Pre_order extends MY_Controller {
                 if($this->Base_model->insert('detail_pre_order', $array_model) === false)
                 {
                     return false;
+                }
+            }
+            
+            //MENGINPUT TOTAL HARGA
+            $total_harga = $this->hitung_total_harga($id_pre_order);
+            $this->Base_model->edit('pre_order', array('id_pre_order' => $id_pre_order), array('total_harga' => $total_harga));
+            return true;
+            
+        }else
+        {   
+            //error hapus detail pre_order_lama
+            return false;
+        }
+    }
+
+    public function edit_detail_pre_order_per_seri($id_pre_order){
+
+        $id_gudang = $this->input->post('edit_id_gudang_tujuan', TRUE);
+
+        $all_barang = array_values($this->input->post('edit_id_barang[]'));
+        $jumlah = array_values($this->input->post('edit_jumlah_barang[]'));
+        
+        /*
+            Tahapan edit detail pre_order
+            1. Hapus data lama
+            2. Input data detail pre_order yang baru
+        */
+        
+        if($this->Base_model->delete('detail_pre_order', array('id_pre_order' => $id_pre_order)) == true)
+        {   
+            for ($i=0; $i < count($all_barang); $i++) 
+            { 
+                $specific_barang = explode('-', $all_barang[$i]);
+                $where = array(
+                    'merek' => $specific_barang[0],
+                    'tipe' => $specific_barang[1],
+                    'warna' => $specific_barang[2]
+                );
+            
+                $array_barang_sejenis = $this->Base_model->get_all_specific('barang', $where);
+            
+                foreach ($array_barang_sejenis as $key => $value) {
+                    
+                    $array_model = array(
+                        'id_pre_order' => $id_pre_order,
+                        'id_barang' => $value->id_barang,
+                        'jumlah' => 4 * $jumlah[$i],
+                        'satuan' => 'pasang',
+                        'harga_per_satuan' => 0
+                    );
+                    
+                    if($this->Base_model->insert('detail_pre_order', $array_model) === false)
+                    {
+                        return false;
+                    }
                 }
             }
             

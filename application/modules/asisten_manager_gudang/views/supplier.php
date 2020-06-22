@@ -66,8 +66,7 @@
               </div>
             </div>
             <div class="card-footer">
-              <input type="submit" value="Submit" class="btn btn-primary" />
-              <input type="reset" value="Reset" class="btn btn-primary btn-link" />
+              <input type="submit" value="Tambah" class="btn btn-primary" />
             </div>
         </form>
       </div>
@@ -184,8 +183,7 @@
 
         </div>
         <div class="modal-footer">
-          <input type="reset" value="Reset" class="btn btn-outline-primary" />
-          <input type="submit" value="Submit" class="btn btn-primary" />
+          <input type="submit" value="Edit" class="btn btn-primary" />
         </div>
       </form>
     </div>

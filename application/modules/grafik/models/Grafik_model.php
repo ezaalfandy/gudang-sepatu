@@ -5,7 +5,7 @@
     class Grafik_model extends CI_Model {
     
         public function get_grafik_penjualan($where, $group_by){
-            return $this->db->select("SUM(detail_penjualan.jumlah)as jumlah, barang.*, DATE_FORMAT(penjualan.tanggal_penjualan, '%a') as hari
+             $this->db->select("SUM(detail_penjualan.jumlah)as jumlah, barang.*, DATE_FORMAT(penjualan.tanggal_penjualan, '%a') as hari
             , DATE_FORMAT(penjualan.tanggal_penjualan, '%d %b') as tanggal_bulan")
                         ->join('penjualan', 'penjualan.id_penjualan = detail_penjualan.id_penjualan')
                         ->join('barang', 'barang.id_barang = detail_penjualan.id_barang')
@@ -60,7 +60,6 @@
                         ->group_by('barang.id_barang')
                         ->get('detail_penjualan')
                         ->result();
-            
         }
 
     }

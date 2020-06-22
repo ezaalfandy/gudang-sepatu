@@ -82,6 +82,55 @@
             $this->session->set_userdata( $session );
             return true;
         }
+
+        public function get_ajax_lookup_barang($keyword, $group_by = NULL)
+        {
+            $like = array(
+                "kode_barang" => $keyword
+            );
+
+            if($group_by == NULL)
+            {
+                $data =  $this->db->or_like($like)->get('barang', 10, 0)->result();
+            }else
+            {
+                $data =  $this->db->or_like($like)->group_by($group_by)->get('barang', 10, 0)->result();
+            }
+            
+            $return_array = array();
+
+
+            if($data !== NULL)
+            {
+                if($group_by == NULL)
+                {
+                    foreach ($data as $key => $value) {
+                        $temp = array(
+                            "value" => $value->merek.'  '.$value->tipe.'  '.$value->warna.'  '.$value->ukuran.' ('.$value->kode_barang.')',
+                            "data" => $value->id_barang
+                        );
+                        $return_array[] = $temp;
+                    }
+                }else
+                {
+                    foreach ($data as $key => $value) {
+                        $temp = array(
+                            "value" => $value->merek.' '.$value->tipe.' '.$value->warna,
+                            "data" => $value->merek.'-'.$value->tipe.'-'.$value->warna
+                        );
+                        $return_array[] = $temp;
+                    }
+                }
+
+                return array(
+                    "suggestions" => $return_array
+                );
+            }else{
+                return NULL;
+            }
+
+        }
+
     }
     
     /* End of file Base_model.php */

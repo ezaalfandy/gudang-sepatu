@@ -431,52 +431,32 @@
         {
             if($this->session->userdata('level') == 'admin_gudang')
             {   
-                $config = array(
-                    array(
-                        'field' => 'insert_jenis_transaksi',
-                        'label' => 'Jenis Transaksi',
-                        'rules' => 'required'
-                    )
-                );
+                $id_gudang = $this->session->userdata('id_gudang');
+                $id_penjualan = $this->penjualan->insert_penjualan($id_gudang);
 
-                $this->form_validation->set_rules($config);
-                if($this->form_validation->run() == TRUE) 
-                {   
-                    $id_gudang = $this->session->userdata('id_gudang');
-                    $id_penjualan = $this->penjualan->insert_penjualan($id_gudang);
-
-                    if($id_penjualan !== false)
+                if($id_penjualan !== false)
+                {
+                    if($this->penjualan->insert_detail_penjualan($id_penjualan, $id_gudang) == true)
                     {
-                        if($this->penjualan->insert_detail_penjualan($id_penjualan, $id_gudang) == true)
-                        {
-                            $array = array(
-                                'status' => 'success',
-                                'message' => 'Berhasil Input Data Penjualan'
-                            );
+                        $array = array(
+                            'status' => 'success',
+                            'message' => 'Berhasil Input Data Penjualan'
+                        );
 
-                            $this->session->set_flashdata($array);
-                            redirect('admin-gudang/view-insert-penjualan');
-                        }else{
-                            $array = array(
-                                'status' => 'failed',
-                                'message' => 'Gagal Input Data Penjualan'
-                            );
-                        }
-                        
-                    }else
-                    {
+                        $this->session->set_flashdata($array);
+                        redirect('admin-gudang/view-insert-penjualan');
+                    }else{
                         $array = array(
                             'status' => 'failed',
                             'message' => 'Gagal Input Data Penjualan'
                         );
                     }
                     
-                }else{
-                    
-                    // VALIDASI GAGAL
+                }else
+                {
                     $array = array(
                         'status' => 'failed',
-                        'message' => validation_errors(' ', '')
+                        'message' => 'Gagal Input Data Penjualan'
                     );
                 }
                 $this->session->set_flashdata($array);
